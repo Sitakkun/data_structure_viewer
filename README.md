@@ -1,6 +1,8 @@
 # Data Structure Viewer
 
 個人学習用の React + TypeScript アプリです。  
+GitHub Pages: https://sitakkun.github.io/data_structure_viewer/
+
 現在は 2 つの学習ページを持っています。
 
 - `B-tree`
