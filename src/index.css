@@ -1405,6 +1405,31 @@ button {
     gap: 14px;
   }
 
+  .workspace {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .visual-column {
+    display: contents;
+  }
+
+  .panel-controls {
+    order: 4;
+  }
+
+  .panel-visualizer {
+    order: 1;
+  }
+
+  .panel-inspector {
+    order: 2;
+  }
+
+  .panel-code {
+    order: 3;
+  }
+
   .panel {
     border-radius: 22px;
     padding: 16px;
