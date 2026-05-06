@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { MobilePlaybackDock } from "../../components/MobilePlaybackDock";
 import { usePlaybackShortcuts } from "../../hooks/usePlaybackShortcuts";
 import { bEpsilonCodeExamples } from "./codeExamples";
 import { BEpsilonTreeCodePanel } from "./components/BEpsilonTreeCodePanel";
@@ -241,6 +242,15 @@ export function BEpsilonTreePage() {
           scenarioDescription={scenarioDescription}
         />
       </div>
+      <MobilePlaybackDock
+        currentStepIndex={currentStepIndex}
+        totalSteps={steps.length}
+        isPlaying={isPlaying}
+        onPlayPause={handlePlayPause}
+        onPrev={handlePrev}
+        onNext={handleNext}
+        onReset={handleReset}
+      />
     </>
   );
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { MobilePlaybackDock } from "../../components/MobilePlaybackDock";
 import { usePlaybackShortcuts } from "../../hooks/usePlaybackShortcuts";
 import { hashRingCodeExamples } from "./codeExamples";
 import { HashRingCodePanel } from "./components/HashRingCodePanel";
@@ -251,6 +252,15 @@ export function HashRingPage() {
           scenarioDescription={scenarioDescription}
         />
       </div>
+      <MobilePlaybackDock
+        currentStepIndex={currentStepIndex}
+        totalSteps={steps.length}
+        isPlaying={isPlaying}
+        onPlayPause={handlePlayPause}
+        onPrev={handlePrev}
+        onNext={handleNext}
+        onReset={handleReset}
+      />
     </>
   );
 }

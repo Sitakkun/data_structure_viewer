@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { MobilePlaybackDock } from "../../components/MobilePlaybackDock";
 import { usePlaybackShortcuts } from "../../hooks/usePlaybackShortcuts";
 import { chordCodeExamples } from "./codeExamples";
 import { ChordCodePanel } from "./components/ChordCodePanel";
@@ -230,6 +231,15 @@ export function ChordPage() {
           focusedNodeId={focusedNodeId}
         />
       </div>
+      <MobilePlaybackDock
+        currentStepIndex={currentStepIndex}
+        totalSteps={steps.length}
+        isPlaying={isPlaying}
+        onPlayPause={handlePlayPause}
+        onPrev={handlePrev}
+        onNext={handleNext}
+        onReset={handleReset}
+      />
     </>
   );
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { MobilePlaybackDock } from "../../components/MobilePlaybackDock";
 import { usePlaybackShortcuts } from "../../hooks/usePlaybackShortcuts";
 import { bloomCodeExamples } from "./codeExamples";
 import { BloomFilterCodePanel } from "./components/BloomFilterCodePanel";
@@ -215,6 +216,15 @@ export function BloomFilterPage() {
           scenarioDescription={scenarioDescription}
         />
       </div>
+      <MobilePlaybackDock
+        currentStepIndex={currentStepIndex}
+        totalSteps={steps.length}
+        isPlaying={isPlaying}
+        onPlayPause={handlePlayPause}
+        onPrev={handlePrev}
+        onNext={handleNext}
+        onReset={handleReset}
+      />
     </>
   );
 }

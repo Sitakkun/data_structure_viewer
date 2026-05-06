@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { MobilePlaybackDock } from "../../components/MobilePlaybackDock";
 import { usePlaybackShortcuts } from "../../hooks/usePlaybackShortcuts";
 import { buildBTreeStepComparison } from "../treeStepComparison";
 import { btreeCodeExamples } from "./codeExamples";
@@ -271,6 +272,15 @@ export function BTreePage() {
           comparison={comparison}
         />
       </div>
+      <MobilePlaybackDock
+        currentStepIndex={currentStepIndex}
+        totalSteps={steps.length}
+        isPlaying={isPlaying}
+        onPlayPause={handlePlayPause}
+        onPrev={handlePrev}
+        onNext={handleNext}
+        onReset={handleReset}
+      />
     </>
   );
 }

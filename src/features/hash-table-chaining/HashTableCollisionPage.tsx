@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { MobilePlaybackDock } from "../../components/MobilePlaybackDock";
 import { usePlaybackShortcuts } from "../../hooks/usePlaybackShortcuts";
 import { hashTableCodeExamplesByStrategy } from "./codeExamples";
 import { CodeExamplesPanel } from "./components/CodeExamplesPanel";
@@ -288,6 +289,15 @@ export function HashTableCollisionPage() {
           conceptNote={currentLesson.conceptNote}
         />
       </div>
+      <MobilePlaybackDock
+        currentStepIndex={currentStepIndex}
+        totalSteps={steps.length}
+        isPlaying={isPlaying}
+        onPlayPause={handlePlayPause}
+        onPrev={handlePrev}
+        onNext={handleNext}
+        onReset={handleReset}
+      />
     </>
   );
 }
