@@ -7,6 +7,7 @@ import { ChordPage } from "./features/consistent-hashing-chord/ChordPage";
 import { HashRingPage } from "./features/consistent-hashing-hash-ring/HashRingPage";
 import { HashTableCollisionPage } from "./features/hash-table-chaining/HashTableCollisionPage";
 import { LSMTreePage } from "./features/lsm-tree/LSMTreePage";
+import { PaxosPage } from "./features/paxos/PaxosPage";
 import { WriteAmplificationPage } from "./features/write-amplification/WriteAmplificationPage";
 
 type StudyPage =
@@ -16,6 +17,7 @@ type StudyPage =
   | "bloom-filter"
   | "hash-table-collision"
   | "lsm-tree"
+  | "paxos"
   | "write-amplification"
   | "consistent-hashing"
   | "consistent-hashing-chord";
@@ -69,6 +71,12 @@ const studyPages: Array<{
     description: "B-tree / Bε tree / LSM-tree の write path を比較します。",
   },
   {
+    id: "paxos",
+    title: "Paxos",
+    track: "Consensus",
+    description: "prepare / promise / accept / chosen と quorum safety を確認します。",
+  },
+  {
     id: "consistent-hashing",
     title: "Consistent Hashing",
     track: "Distributed Hashing",
@@ -118,6 +126,18 @@ const glossaryTerms = [
   {
     term: "compaction",
     description: "複数の SSTable を merge し、古い値や tombstone を整理する処理です。",
+  },
+  {
+    term: "quorum",
+    description: "分散合意で値を決めるために必要な過半数などの最小集合です。",
+  },
+  {
+    term: "promise",
+    description: "Paxos acceptor が、より低い proposal number を受け付けないと約束する応答です。",
+  },
+  {
+    term: "proposal number",
+    description: "Paxos で競合する proposer の優先順位を決める単調増加の番号です。",
   },
 ];
 
@@ -231,6 +251,7 @@ export default function App() {
       {selectedPage === "bloom-filter" ? <BloomFilterPage /> : null}
       {selectedPage === "hash-table-collision" ? <HashTableCollisionPage /> : null}
       {selectedPage === "lsm-tree" ? <LSMTreePage /> : null}
+      {selectedPage === "paxos" ? <PaxosPage /> : null}
       {selectedPage === "write-amplification" ? <WriteAmplificationPage /> : null}
       {selectedPage === "consistent-hashing" ? <HashRingPage /> : null}
       {selectedPage === "consistent-hashing-chord" ? <ChordPage /> : null}

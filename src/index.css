@@ -1425,6 +1425,155 @@ button {
   box-shadow: inset 0 4px 0 rgba(107, 91, 210, 0.22);
 }
 
+.paxos-stage {
+  display: grid;
+  gap: 16px;
+}
+
+.paxos-proposer-row,
+.paxos-acceptor-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.paxos-acceptor-grid {
+  grid-template-columns: repeat(5, minmax(130px, 1fr));
+}
+
+.paxos-proposer-card,
+.paxos-acceptor-card,
+.paxos-learner-card {
+  display: grid;
+  gap: 12px;
+  padding: 15px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid rgba(23, 32, 51, 0.08);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.paxos-proposer-card.is-active,
+.paxos-acceptor-card.is-active {
+  transform: translateY(-2px);
+  background: rgba(255, 244, 238, 0.96);
+  border-color: rgba(207, 95, 47, 0.32);
+}
+
+.paxos-learner-card.is-chosen {
+  background: rgba(36, 107, 100, 0.1);
+  border-color: rgba(36, 107, 100, 0.22);
+}
+
+.paxos-card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.paxos-card-header strong {
+  font-size: 1.12rem;
+}
+
+.paxos-card-header span {
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.paxos-state-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.paxos-state-list div {
+  display: grid;
+  gap: 3px;
+}
+
+.paxos-state-list dt {
+  color: var(--ink-soft);
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.paxos-state-list dd {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.paxos-message-lane {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  min-height: 58px;
+  padding: 12px;
+  border-radius: 20px;
+  background:
+    linear-gradient(90deg, rgba(36, 107, 100, 0.08), rgba(207, 95, 47, 0.08)),
+    rgba(255, 255, 255, 0.52);
+  border: 1px dashed rgba(23, 32, 51, 0.12);
+}
+
+.paxos-message,
+.paxos-empty-message {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(36, 107, 100, 0.18);
+  background: rgba(36, 107, 100, 0.1);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.paxos-message small {
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.paxos-message.is-dropped {
+  opacity: 0.62;
+  text-decoration: line-through;
+  background: rgba(207, 95, 47, 0.12);
+  border-color: rgba(207, 95, 47, 0.22);
+}
+
+.paxos-empty-message {
+  color: var(--ink-soft);
+  border-style: dashed;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.paxos-learner-content {
+  display: grid;
+  gap: 5px;
+}
+
+.paxos-learner-content span,
+.paxos-learner-content small {
+  color: var(--ink-soft);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.paxos-learner-content strong {
+  font-size: 2rem;
+  letter-spacing: -0.06em;
+}
+
 .wa-engine-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1943,6 +2092,38 @@ button {
   .lsm-empty-chip {
     flex: 0 0 auto;
     font-size: 0.78rem;
+  }
+
+  .paxos-proposer-row,
+  .paxos-acceptor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .paxos-message-lane,
+  .paxos-acceptor-grid {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .paxos-acceptor-grid {
+    display: flex;
+    gap: 10px;
+  }
+
+  .paxos-acceptor-card {
+    flex: 0 0 190px;
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .paxos-proposer-card,
+  .paxos-learner-card {
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .paxos-message {
+    flex: 0 0 auto;
   }
 
   .wa-engine-grid {
