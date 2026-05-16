@@ -6,6 +6,7 @@ import { BloomFilterPage } from "./features/bloom-filter/BloomFilterPage";
 import { ChordPage } from "./features/consistent-hashing-chord/ChordPage";
 import { HashRingPage } from "./features/consistent-hashing-hash-ring/HashRingPage";
 import { HashTableCollisionPage } from "./features/hash-table-chaining/HashTableCollisionPage";
+import { LSMTreePage } from "./features/lsm-tree/LSMTreePage";
 import { WriteAmplificationPage } from "./features/write-amplification/WriteAmplificationPage";
 
 type StudyPage =
@@ -14,6 +15,7 @@ type StudyPage =
   | "b-tree"
   | "bloom-filter"
   | "hash-table-collision"
+  | "lsm-tree"
   | "write-amplification"
   | "consistent-hashing"
   | "consistent-hashing-chord";
@@ -47,6 +49,12 @@ const studyPages: Array<{
     title: "Bε Tree",
     track: "Write Optimization",
     description: "buffered update、flush、split を確認します。",
+  },
+  {
+    id: "lsm-tree",
+    title: "LSM-tree",
+    track: "Write Optimization",
+    description: "WAL、memtable、SSTable、compaction を確認します。",
   },
   {
     id: "bloom-filter",
@@ -98,6 +106,18 @@ const glossaryTerms = [
   {
     term: "finger table",
     description: "Chord で遠いノードへ効率よく進むためのショートカット表です。",
+  },
+  {
+    term: "memtable",
+    description: "LSM-tree で最新の write を受けるメモリ上の sorted structure です。",
+  },
+  {
+    term: "SSTable",
+    description: "flush で作られる immutable な sorted file です。",
+  },
+  {
+    term: "compaction",
+    description: "複数の SSTable を merge し、古い値や tombstone を整理する処理です。",
   },
 ];
 
@@ -210,6 +230,7 @@ export default function App() {
       {selectedPage === "b-tree" ? <BTreePage /> : null}
       {selectedPage === "bloom-filter" ? <BloomFilterPage /> : null}
       {selectedPage === "hash-table-collision" ? <HashTableCollisionPage /> : null}
+      {selectedPage === "lsm-tree" ? <LSMTreePage /> : null}
       {selectedPage === "write-amplification" ? <WriteAmplificationPage /> : null}
       {selectedPage === "consistent-hashing" ? <HashRingPage /> : null}
       {selectedPage === "consistent-hashing-chord" ? <ChordPage /> : null}
