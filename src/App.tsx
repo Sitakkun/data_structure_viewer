@@ -3,6 +3,7 @@ import { BPlusTreePage } from "./features/b-plus-tree/BPlusTreePage";
 import { BEpsilonTreePage } from "./features/b-epsilon-tree/BEpsilonTreePage";
 import { BTreePage } from "./features/b-tree/BTreePage";
 import { BloomFilterPage } from "./features/bloom-filter/BloomFilterPage";
+import { BufferPoolPage } from "./features/buffer-pool/BufferPoolPage";
 import { ChordPage } from "./features/consistent-hashing-chord/ChordPage";
 import { HashRingPage } from "./features/consistent-hashing-hash-ring/HashRingPage";
 import { HashTableCollisionPage } from "./features/hash-table-chaining/HashTableCollisionPage";
@@ -15,6 +16,7 @@ type StudyPage =
   | "b-epsilon-tree"
   | "b-tree"
   | "bloom-filter"
+  | "buffer-pool"
   | "hash-table-collision"
   | "lsm-tree"
   | "paxos"
@@ -69,6 +71,12 @@ const studyPages: Array<{
     title: "Write Amplification",
     track: "Storage Cost",
     description: "B-tree / Bε tree / LSM-tree の write path を比較します。",
+  },
+  {
+    id: "buffer-pool",
+    title: "Buffer Pool",
+    track: "Database Storage",
+    description: "LRU と CLOCK の page replacement、dirty page、pin count を確認します。",
   },
   {
     id: "paxos",
@@ -138,6 +146,18 @@ const glossaryTerms = [
   {
     term: "proposal number",
     description: "Paxos で競合する proposer の優先順位を決める単調増加の番号です。",
+  },
+  {
+    term: "dirty page",
+    description: "buffer pool 上で更新済みだが、まだ disk に書き戻されていない page です。",
+  },
+  {
+    term: "pin count",
+    description: "query が利用中の page を eviction から守るための参照数です。",
+  },
+  {
+    term: "reference bit",
+    description: "CLOCK replacement で最近参照された page に second chance を与えるための bit です。",
   },
 ];
 
@@ -249,6 +269,7 @@ export default function App() {
       {selectedPage === "b-epsilon-tree" ? <BEpsilonTreePage /> : null}
       {selectedPage === "b-tree" ? <BTreePage /> : null}
       {selectedPage === "bloom-filter" ? <BloomFilterPage /> : null}
+      {selectedPage === "buffer-pool" ? <BufferPoolPage /> : null}
       {selectedPage === "hash-table-collision" ? <HashTableCollisionPage /> : null}
       {selectedPage === "lsm-tree" ? <LSMTreePage /> : null}
       {selectedPage === "paxos" ? <PaxosPage /> : null}

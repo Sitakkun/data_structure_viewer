@@ -1574,6 +1574,184 @@ button {
   letter-spacing: -0.06em;
 }
 
+.buffer-disk-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.buffer-disk-page {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(23, 32, 51, 0.08);
+  background: rgba(255, 255, 255, 0.64);
+  color: var(--ink-soft);
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.buffer-disk-page.is-active {
+  color: #172033;
+  background: rgba(255, 215, 117, 0.44);
+  border-color: rgba(182, 121, 16, 0.3);
+}
+
+.buffer-frame-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.buffer-frame-card {
+  display: grid;
+  gap: 12px;
+  min-height: 172px;
+  padding: 15px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid rgba(23, 32, 51, 0.08);
+  box-shadow: inset 0 4px 0 rgba(36, 107, 100, 0.16);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.buffer-frame-card.is-active {
+  transform: translateY(-2px);
+  background: rgba(255, 244, 238, 0.96);
+  border-color: rgba(207, 95, 47, 0.32);
+}
+
+.buffer-frame-card.is-victim {
+  background: rgba(207, 95, 47, 0.13);
+  border-color: rgba(207, 95, 47, 0.34);
+}
+
+.buffer-frame-card.is-dirty {
+  box-shadow: inset 0 4px 0 rgba(207, 95, 47, 0.32);
+}
+
+.buffer-frame-card.is-pinned {
+  outline: 2px solid rgba(107, 91, 210, 0.2);
+  outline-offset: 2px;
+}
+
+.buffer-frame-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.buffer-frame-header strong {
+  font-size: 1rem;
+}
+
+.buffer-frame-header span {
+  font-size: 1.55rem;
+  font-weight: 900;
+  letter-spacing: -0.06em;
+}
+
+.buffer-frame-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.buffer-flag {
+  padding: 6px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(23, 32, 51, 0.08);
+  background: rgba(255, 255, 255, 0.62);
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.buffer-flag.is-on {
+  color: #172033;
+  background: rgba(36, 107, 100, 0.12);
+  border-color: rgba(36, 107, 100, 0.22);
+}
+
+.buffer-frame-meta {
+  display: grid;
+  gap: 4px;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.buffer-policy-strip {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 22px;
+  background:
+    linear-gradient(90deg, rgba(36, 107, 100, 0.08), rgba(255, 215, 117, 0.12)),
+    rgba(255, 255, 255, 0.54);
+  border: 1px dashed rgba(23, 32, 51, 0.12);
+}
+
+.buffer-policy-label {
+  color: var(--teal);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.buffer-policy-chain,
+.buffer-clock-ring {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.buffer-page-chip,
+.buffer-end-chip,
+.buffer-clock-slot {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(36, 107, 100, 0.16);
+  background: rgba(36, 107, 100, 0.1);
+  font-size: 0.84rem;
+  font-weight: 900;
+}
+
+.buffer-page-chip small,
+.buffer-clock-slot small {
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.buffer-end-chip {
+  color: var(--ink-soft);
+  border-style: dashed;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.buffer-clock-slot {
+  border-radius: 16px;
+}
+
+.buffer-clock-slot.is-hand {
+  background: rgba(255, 215, 117, 0.42);
+  border-color: rgba(182, 121, 16, 0.3);
+}
+
 .wa-engine-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2124,6 +2302,44 @@ button {
 
   .paxos-message {
     flex: 0 0 auto;
+  }
+
+  .buffer-disk-row,
+  .buffer-policy-chain,
+  .buffer-clock-ring {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .buffer-frame-grid {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    margin-inline: -16px;
+    padding: 2px 16px 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .buffer-frame-card {
+    flex: 0 0 210px;
+    min-height: 160px;
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .buffer-disk-page,
+  .buffer-page-chip,
+  .buffer-end-chip,
+  .buffer-clock-slot {
+    flex: 0 0 auto;
+    font-size: 0.78rem;
+  }
+
+  .buffer-policy-strip {
+    padding: 12px;
+    border-radius: 18px;
   }
 
   .wa-engine-grid {
