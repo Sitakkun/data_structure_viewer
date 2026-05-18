@@ -35,7 +35,10 @@ function FrameCard({
     .join(" ");
 
   return (
-    <article className={classes}>
+    <article
+      className={classes}
+      data-testid={frame.dirty ? "dirty-frame" : undefined}
+    >
       <div className="buffer-frame-header">
         <strong>Frame {frame.frameIndex}</strong>
         <span>{pageLabel(frame.pageId)}</span>
@@ -94,6 +97,11 @@ function ClockRing({
         {bufferState.frames.map((frame) => (
           <span
             key={frame.frameIndex}
+            data-testid={
+              frame.frameIndex === (step?.highlights.clockHandIndex ?? bufferState.clockHand)
+                ? "clock-hand"
+                : undefined
+            }
             className={
               frame.frameIndex === (step?.highlights.clockHandIndex ?? bufferState.clockHand)
                 ? "buffer-clock-slot is-hand"

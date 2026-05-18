@@ -1,6 +1,8 @@
 node_modules/
 dist/
 .venv/
+playwright-report/
+test-results/
 
 *.tsbuildinfo
 .DS_Store
