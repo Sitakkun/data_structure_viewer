@@ -13,17 +13,199 @@ async function selectTopic(page: Page, topic: string) {
     .click();
 }
 
-test("navigates representative study pages", async ({ page }) => {
+function controls(page: Page) {
+  return page.locator(".panel-controls");
+}
+
+function inspector(page: Page) {
+  return page.locator(".panel-inspector");
+}
+
+function inspectorHeading(page: Page) {
+  return inspector(page).locator("h2");
+}
+
+async function clickControl(page: Page, name: string) {
+  await controls(page).getByRole("button", { name, exact: true }).click();
+}
+
+async function clickNext(page: Page) {
+  await clickControl(page, "Next");
+}
+
+async function loadScenario(page: Page, title: string) {
+  await controls(page).getByText(title, { exact: true }).click();
+}
+
+async function advanceUntilHeading(
+  page: Page,
+  expectedHeading: string,
+  maxSteps = 12,
+) {
+  for (let step = 0; step < maxSteps; step += 1) {
+    if ((await inspectorHeading(page).textContent()) === expectedHeading) {
+      return;
+    }
+
+    await clickNext(page);
+  }
+
+  await expect(inspectorHeading(page)).toHaveText(expectedHeading);
+}
+
+test("navigates all study pages", async ({ page }) => {
   await openApp(page);
 
-  await selectTopic(page, "Buffer Pool");
-  await expect(page.getByRole("heading", { name: "Buffer Pool", level: 1 })).toBeVisible();
+  const pages = [
+    ["Hash Table Collision", "Hash Table: Separate Chaining"],
+    ["B-tree", "Normal B-tree"],
+    ["B+ Tree", "Normal B+ Tree"],
+    ["Bε Tree", "Bε Tree"],
+    ["LSM-tree", "LSM-tree"],
+    ["Bloom Filter", "Bloom Filter"],
+    ["Write Amplification", "Write Amplification"],
+    ["Buffer Pool", "Buffer Pool"],
+    ["Paxos", "Paxos"],
+    ["Consistent Hashing", "Hash Ring"],
+    ["Chord", "Chord Finger Table"],
+  ];
 
-  await selectTopic(page, "Paxos");
-  await expect(page.getByRole("heading", { name: "Paxos", level: 1 })).toBeVisible();
+  for (const [topic, heading] of pages) {
+    await selectTopic(page, topic);
+    await expect(
+      page.getByRole("heading", { name: heading, level: 1 }),
+    ).toBeVisible();
+  }
+});
 
+test("runs Hash Table linear probing with shortcuts and C code view", async ({ page }) => {
+  await openApp(page);
+  await selectTopic(page, "Hash Table Collision");
+
+  await clickControl(page, "Linear Probing");
+  await expect(
+    page.getByRole("heading", { name: "Hash Table: Linear Probing", level: 1 }),
+  ).toBeVisible();
+
+  await loadScenario(page, "tombstone を使う削除");
+  await expect(inspectorHeading(page)).toHaveText("tombstone を使う削除");
+
+  await page.keyboard.press("ArrowRight");
+  await expect(inspectorHeading(page)).toHaveText("開始スロットを決定");
+
+  await page.keyboard.press("ArrowRight");
+  await expect(inspectorHeading(page)).toHaveText("削除対象を比較");
+
+  await page.keyboard.press("ArrowRight");
+  await page.keyboard.press("ArrowRight");
+  await expect(inspectorHeading(page)).toHaveText("tombstone で削除");
+
+  await page.keyboard.press("r");
+  await expect(inspectorHeading(page)).toHaveText("tombstone を使う削除");
+
+  const codePanel = page.locator(".panel-code");
+  await codePanel.getByRole("button", { name: "C", exact: true }).click();
+  await expect(codePanel).toContainText("Linear Probing Code");
+  await expect(codePanel).toContainText("tombstone");
+});
+
+test("runs B-tree range scan and exposes cost comparison", async ({ page }) => {
+  await openApp(page);
+  await selectTopic(page, "B-tree");
+
+  await controls(page).getByLabel("Start").fill("20");
+  await controls(page).getByLabel("End").fill("50");
+  await clickControl(page, "Range Scan");
+  await expect(inspectorHeading(page)).toHaveText("RANGE 20..50");
+
+  await clickNext(page);
+  await expect(inspectorHeading(page)).toHaveText("範囲走査を開始");
+  await expect(inspector(page)).toContainText("O(log n + k)");
+  await expect(inspector(page)).toContainText("Step comparison");
+});
+
+test("runs B+ Tree leaf-chain range scan", async ({ page }) => {
+  await openApp(page);
+  await selectTopic(page, "B+ Tree");
+
+  await loadScenario(page, "複数の葉をまたいで範囲走査する");
+  await expect(inspectorHeading(page)).toHaveText(
+    "複数の葉をまたいで範囲走査する",
+  );
+
+  await clickNext(page);
+  await expect(inspectorHeading(page)).toHaveText("範囲走査を開始");
+  await expect(inspector(page)).toContainText("leaf chain");
+
+  await advanceUntilHeading(page, "次の葉へ移動");
+  await expect(inspector(page)).toContainText("O(log n + k)");
+});
+
+test("runs Bloom Filter manual insert and query", async ({ page }) => {
+  await openApp(page);
+  await selectTopic(page, "Bloom Filter");
+
+  await controls(page).getByLabel("Item").fill("grape");
+  await clickControl(page, "Insert");
+  await expect(inspectorHeading(page)).toHaveText("INSERT grape");
+
+  await clickNext(page);
+  await expect(inspectorHeading(page)).toHaveText("ハッシュ値を計算");
+  await expect(inspector(page)).toContainText("Hash count");
+
+  await clickControl(page, "Reset");
+  await clickControl(page, "Query");
+  await expect(inspectorHeading(page)).toHaveText("QUERY grape");
+
+  await clickNext(page);
+  await expect(inspectorHeading(page)).toHaveText("照会位置を計算");
+  await expect(inspector(page)).toContainText("Bloom Filter は false positive");
+});
+
+test("runs LSM-tree flush and compaction scenarios", async ({ page }) => {
+  await openApp(page);
   await selectTopic(page, "LSM-tree");
-  await expect(page.getByRole("heading", { name: "LSM-tree", level: 1 })).toBeVisible();
+
+  await loadScenario(page, "Memtable を SSTable に flush する");
+  await clickNext(page);
+  await expect(inspectorHeading(page)).toHaveText("Freeze memtable");
+
+  await clickNext(page);
+  await expect(inspectorHeading(page)).toHaveText("Write SSTable");
+  await expect(inspector(page)).toContainText("SSTables");
+
+  await loadScenario(page, "Compaction で obsolete record を落とす");
+  await clickNext(page);
+  await expect(inspectorHeading(page)).toHaveText("Read SSTables for compaction");
+});
+
+test("runs Paxos competing proposer flow", async ({ page }) => {
+  await openApp(page);
+  await selectTopic(page, "Paxos");
+
+  await loadScenario(page, "Competing proposers: 高い番号が優先される");
+  await clickNext(page);
+  await expect(inspectorHeading(page)).toHaveText("P1 gets promises for n=1");
+  await expect(inspector(page)).toContainText("Promises");
+
+  await clickNext(page);
+  await expect(inspectorHeading(page)).toHaveText("P2 preempts with higher n=2");
+  await expect(inspector(page)).toContainText("Current phase");
+});
+
+test("runs Chord lookup and shows finger table details", async ({ page }) => {
+  await openApp(page);
+  await selectTopic(page, "Chord");
+
+  await expect(inspector(page)).toContainText("Finger table");
+  await loadScenario(page, "finger で大きくジャンプする");
+
+  await clickNext(page);
+  await expect(inspectorHeading(page)).toHaveText("リソース位置を求める");
+
+  await advanceUntilHeading(page, "フィンガーテーブルでジャンプ");
+  await expect(inspector(page)).toContainText("Lookup path");
+  await expect(inspector(page)).toContainText("successor");
 });
 
 test("runs Buffer Pool CLOCK scenario and advances steps", async ({ page }) => {
@@ -31,14 +213,14 @@ test("runs Buffer Pool CLOCK scenario and advances steps", async ({ page }) => {
   await selectTopic(page, "Buffer Pool");
 
   await expect(page.getByText("Policy = LRU")).toBeVisible();
-  await page.getByRole("button", { name: "CLOCK", exact: true }).click();
+  await clickControl(page, "CLOCK");
   await expect(page.getByText("Policy = CLOCK")).toBeVisible();
 
-  await page.getByText("Sequential scan pressure", { exact: true }).click();
-  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await loadScenario(page, "Sequential scan pressure");
+  await clickNext(page);
   await expect(page.getByRole("heading", { name: "Page 1 miss" })).toBeVisible();
 
-  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await clickNext(page);
   await expect(page.getByRole("heading", { name: "Load page 1" })).toBeVisible();
   await expect(page.getByTestId("clock-hand")).toHaveCount(1);
 });
@@ -48,12 +230,12 @@ test("marks a Buffer Pool update as dirty", async ({ page }) => {
   await selectTopic(page, "Buffer Pool");
 
   await page.getByLabel("Page ID").fill("9");
-  await page.getByRole("button", { name: "Update", exact: true }).click();
+  await clickControl(page, "Update");
 
-  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await clickNext(page);
   await expect(page.getByRole("heading", { name: "Page 9 miss" })).toBeVisible();
 
-  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await clickNext(page);
   await expect(page.getByRole("heading", { name: "Load page 9" })).toBeVisible();
   await expect(page.getByTestId("dirty-frame")).toHaveCount(1);
 });
