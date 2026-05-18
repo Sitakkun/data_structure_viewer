@@ -3,7 +3,18 @@
 個人学習用の React + TypeScript アプリです。  
 GitHub Pages: https://sitakkun.github.io/data_structure_viewer/
 
-現在は 2 つの学習ページを持っています。
+## 開発フロー
+
+今後の開発は Issue 駆動で進めます。
+
+- 作業前に GitHub Issue を作成
+- Issue ごとに `codex/issue-<number>-<short-topic>` branch を作成
+- 実装、確認、PR 作成
+- PR 本文に `Closes #<issue-number>` を記載
+
+詳細は [Development Workflow](docs/development-workflow.md) を参照してください。
+
+現在は複数の学習ページを持っています。
 
 - `B-tree`
 - `Bloom Filter`
