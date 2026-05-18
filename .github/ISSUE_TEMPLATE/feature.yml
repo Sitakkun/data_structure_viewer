@@ -1,0 +1,52 @@
+name: Feature
+description: 新しい可視化ページ、シナリオ、UI 改善を追加する
+title: "[Feature]: "
+labels: ["feature"]
+body:
+  - type: textarea
+    id: background
+    attributes:
+      label: Background
+      description: なぜ必要か、どの学習体験を改善するかを書きます。
+      placeholder: 例：Buffer Pool の scan pressure を LRU-K と比較したい。
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: 今回の PR で実装する範囲を書きます。
+      placeholder: |
+        - 新しい scenario を追加する
+        - Step Log に比較メトリクスを追加する
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: 完了判定をチェック可能な形で書きます。
+      placeholder: |
+        - [ ] 操作パネルから scenario を選べる
+        - [ ] Next / Prev / Reset で step を追える
+        - [ ] mobile でも主要パネルが見える
+    validations:
+      required: true
+  - type: textarea
+    id: tests
+    attributes:
+      label: Test Plan
+      description: 実装後に確認するコマンドや E2E 観点を書きます。
+      placeholder: |
+        - npm run build
+        - npm run test:e2e
+    validations:
+      required: true
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: Out of Scope
+      description: 今回やらないことを明示します。
+      placeholder: 例：永続化、複数ユーザー、実 DB 接続は対象外。
+    validations:
+      required: false

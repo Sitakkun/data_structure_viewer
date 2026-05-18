@@ -1,0 +1,40 @@
+name: Task
+description: 開発環境、ドキュメント、CI などの作業を管理する
+title: "[Task]: "
+labels: ["task"]
+body:
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Purpose
+      description: 何を整備するための作業かを書きます。
+      placeholder: 例：Issue 駆動の開発フローを固定する。
+    validations:
+      required: true
+  - type: textarea
+    id: checklist
+    attributes:
+      label: Checklist
+      description: 作業項目をチェックリストで書きます。
+      placeholder: |
+        - [ ] Issue template を追加する
+        - [ ] PR template を追加する
+        - [ ] README からリンクする
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Done When
+      description: 完了条件を書きます。
+      placeholder: 例：新規 Issue / PR 作成時にテンプレートが表示される。
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification
+      description: 確認コマンドやレビュー観点を書きます。
+      placeholder: 例：テンプレートの YAML が妥当で、README から参照できる。
+    validations:
+      required: false
