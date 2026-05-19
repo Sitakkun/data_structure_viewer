@@ -1989,16 +1989,43 @@ button {
 @media (max-width: 1240px) {
   .workspace {
     grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .visual-column {
+    display: contents;
+  }
+
+  .panel-controls {
+    grid-column: 1;
+    grid-row: 1 / span 4;
+  }
+
+  .panel-visualizer {
+    grid-column: 2;
+    grid-row: 1;
   }
 
   .panel-inspector {
-    grid-column: 1 / -1;
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .panel-timeline {
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  .panel-code {
+    grid-column: 2;
+    grid-row: 4;
   }
 }
 
 @media (max-width: 1080px) {
   .workspace {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
   }
 
   .wa-engine-grid {
@@ -2008,11 +2035,31 @@ button {
   .hero {
     flex-direction: column;
   }
+
+  .panel-controls {
+    order: 1;
+  }
+
+  .panel-visualizer {
+    order: 2;
+  }
+
+  .panel-inspector {
+    order: 3;
+  }
+
+  .panel-timeline {
+    order: 4;
+  }
+
+  .panel-code {
+    order: 5;
+  }
 }
 
 @media (max-width: 720px) {
   .app-shell {
-    padding: 14px 14px calc(116px + env(safe-area-inset-bottom));
+    padding: 14px 14px calc(88px + env(safe-area-inset-bottom));
   }
 
   .top-nav {
@@ -2065,17 +2112,25 @@ button {
   }
 
   .learning-support {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    margin-bottom: 16px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 12px;
   }
 
   .support-details {
     border-radius: 18px;
   }
 
+  .support-details[open] {
+    grid-column: 1 / -1;
+  }
+
   .support-details summary {
-    padding: 12px 14px;
+    padding: 11px 9px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.82rem;
   }
 
   .roadmap-grid,
@@ -2088,22 +2143,23 @@ button {
   }
 
   .hero {
-    gap: 14px;
-    margin-bottom: 16px;
+    gap: 10px;
+    margin-bottom: 12px;
   }
 
   .hero h1,
   .panel h2 {
-    font-size: clamp(1.55rem, 9vw, 2.35rem);
+    font-size: clamp(1.45rem, 7vw, 2.05rem);
+    line-height: 1.12;
   }
 
   .hero-copy {
-    font-size: 0.94rem;
+    margin-top: 8px;
+    font-size: 0.9rem;
   }
 
   .hero-meta {
-    justify-content: flex-start;
-    gap: 8px;
+    display: none;
   }
 
   .hero-badge,
@@ -2147,6 +2203,8 @@ button {
   }
 
   .panel {
+    width: 100%;
+    max-width: 100%;
     border-radius: 22px;
     padding: 16px;
   }
@@ -2160,11 +2218,34 @@ button {
   }
 
   .panel-section + .panel-section {
-    margin-top: 18px;
+    margin-top: 14px;
   }
 
   .panel-controls > .panel-section:first-of-type {
     display: none;
+  }
+
+  .panel-controls .panel-header {
+    margin-bottom: 12px;
+  }
+
+  .panel-controls .strategy-toggle {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .panel-controls .strategy-button,
+  .panel-controls .scenario-card {
+    padding: 10px 11px;
+  }
+
+  .panel-controls .button-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .panel-controls .button-row .accent-button,
+  .panel-controls .button-row .secondary-button {
+    min-height: 42px;
+    padding: 9px 6px;
   }
 
   .mobile-playback-dock {
@@ -2173,9 +2254,12 @@ button {
     bottom: calc(10px + env(safe-area-inset-bottom));
     left: 12px;
     z-index: 1000;
-    display: block;
-    padding: 10px;
-    border-radius: 20px;
+    display: grid;
+    grid-template-columns: 66px minmax(0, 1fr);
+    align-items: center;
+    gap: 6px;
+    padding: 6px;
+    border-radius: 16px;
     background: rgba(255, 252, 247, 0.94);
     border: 1px solid rgba(23, 32, 51, 0.1);
     box-shadow: 0 18px 46px rgba(58, 43, 18, 0.18);
@@ -2183,36 +2267,41 @@ button {
   }
 
   .mobile-playback-dock-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 8px;
+    display: grid;
+    gap: 2px;
+    margin-bottom: 0;
+  }
+
+  .mobile-playback-dock-header .eyebrow {
+    display: none;
   }
 
   .mobile-playback-dock-header span {
     color: var(--ink-soft);
-    font-size: 0.88rem;
+    font-size: 0.7rem;
+    font-weight: 800;
+    line-height: 1.12;
+    white-space: nowrap;
   }
 
   .mobile-playback-buttons {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 7px;
+    gap: 5px;
   }
 
   .mobile-playback-buttons .accent-button,
   .mobile-playback-buttons .secondary-button {
-    min-height: 42px;
-    padding: 9px 8px;
-    border-radius: 14px;
-    font-size: 0.84rem;
+    min-height: 36px;
+    padding: 6px 4px;
+    border-radius: 11px;
+    font-size: 0.76rem;
   }
 
   .text-input,
   .accent-button,
   .secondary-button {
-    min-height: 46px;
+    min-height: 42px;
   }
 
   .scenario-card,
@@ -2222,10 +2311,30 @@ button {
   }
 
   .scenario-list {
-    max-height: 42vh;
-    overflow-y: auto;
-    padding-right: 2px;
+    display: flex;
+    gap: 8px;
+    margin-inline: -16px;
+    padding: 0 16px 4px;
+    overflow-x: auto;
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .scenario-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scenario-card {
+    flex: 0 0 230px;
+    gap: 4px;
+  }
+
+  .scenario-card span {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
 
   .range-input-grid,
@@ -2254,9 +2363,22 @@ button {
   }
 
   .bucket-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: 64px minmax(0, 1fr);
     gap: 10px;
-    padding: 13px;
+    padding: 10px 12px;
+    border-radius: 16px;
+  }
+
+  .bucket-index {
+    align-content: center;
+  }
+
+  .bucket-index strong {
+    font-size: 1.35rem;
+  }
+
+  .bucket-chain {
+    min-height: 42px;
   }
 
   .bucket-chain,
@@ -2275,9 +2397,12 @@ button {
     flex: 0 0 auto;
   }
 
-  .stats-grid,
   .button-row {
     grid-template-columns: 1fr;
+  }
+
+  .panel-inspector .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .stats-grid {
@@ -2517,7 +2642,7 @@ button {
 
 @media (max-width: 420px) {
   .app-shell {
-    padding: 10px 10px calc(112px + env(safe-area-inset-bottom));
+    padding: 10px 10px calc(82px + env(safe-area-inset-bottom));
   }
 
   .top-nav {
@@ -2541,7 +2666,12 @@ button {
   }
 
   .slot-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .slot-card {
+    min-height: 74px;
+    padding: 10px;
   }
 
   .bloom-bit-grid {

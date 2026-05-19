@@ -300,30 +300,50 @@ test("marks a Buffer Pool update as dirty", async ({ page }) => {
 test("keeps mobile panel order and playback dock", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await openApp(page);
-  await selectTopic(page, "Buffer Pool");
+  await selectTopic(page, "Hash Table Collision");
+  await loadScenario(page, "衝突なしの挿入");
 
   await expect(page.locator(".mobile-playback-dock")).toBeVisible();
 
-  const panelOrders = await page.evaluate(() =>
-    [
-      ".panel-controls",
-      ".panel-visualizer",
-      ".panel-inspector",
-      ".panel-timeline",
-      ".panel-code",
-    ].map((selector) => {
+  const layout = await page.evaluate(() => {
+    const rect = (selector: string) => {
       const element = document.querySelector(selector);
-      return element ? window.getComputedStyle(element).order : "missing";
-    }),
-  );
+      const bounds = element?.getBoundingClientRect();
 
-  expect(panelOrders).toEqual(["1", "2", "3", "4", "5"]);
+      return bounds
+        ? {
+            top: bounds.top + window.scrollY,
+            bottom: bounds.bottom + window.scrollY,
+            height: bounds.height,
+            order: window.getComputedStyle(element).order,
+          }
+        : null;
+    };
+
+    return {
+      controls: rect(".panel-controls"),
+      visualizer: rect(".panel-visualizer"),
+      inspector: rect(".panel-inspector"),
+      timeline: rect(".panel-timeline"),
+      code: rect(".panel-code"),
+      dock: rect(".mobile-playback-dock"),
+    };
+  });
+
+  expect(layout.controls?.order).toBe("1");
+  expect(layout.visualizer?.order).toBe("2");
+  expect(layout.inspector?.order).toBe("3");
+  expect(layout.timeline?.order).toBe("4");
+  expect(layout.code?.order).toBe("5");
+  expect(layout.visualizer?.top).toBeLessThan(1200);
+  expect(layout.dock?.height).toBeLessThanOrEqual(72);
 });
 
-test("keeps iPad mini landscape panels from overlapping", async ({ page }) => {
+test("keeps iPad mini landscape Step Log close to Visualization", async ({ page }) => {
   await page.setViewportSize({ width: 1133, height: 744 });
   await openApp(page);
-  await selectTopic(page, "B+ Tree");
+  await selectTopic(page, "Hash Table Collision");
+  await loadScenario(page, "同一バケットへの連続挿入");
 
   const layout = await page.evaluate(() => {
     const visualizer = document
@@ -332,17 +352,24 @@ test("keeps iPad mini landscape panels from overlapping", async ({ page }) => {
     const inspector = document
       .querySelector(".panel-inspector")
       ?.getBoundingClientRect();
+    const code = document.querySelector(".panel-code")?.getBoundingClientRect();
 
     return {
       visualizerBottom: visualizer?.bottom ?? 0,
       inspectorTop: inspector?.top ?? 0,
       inspectorLeft: inspector?.left ?? 0,
+      inspectorRight: inspector?.right ?? 0,
+      codeTop: code?.top ?? 0,
       visualizerRight: visualizer?.right ?? 0,
+      visualizerLeft: visualizer?.left ?? 0,
       viewportWidth: window.innerWidth,
     };
   });
 
   expect(layout.inspectorTop).toBeGreaterThan(layout.visualizerBottom);
+  expect(layout.inspectorTop - layout.visualizerBottom).toBeLessThan(40);
+  expect(layout.inspectorTop).toBeLessThan(layout.codeTop);
+  expect(layout.inspectorLeft).toBeGreaterThanOrEqual(layout.visualizerLeft);
+  expect(layout.inspectorRight).toBeLessThanOrEqual(layout.viewportWidth);
   expect(layout.visualizerRight).toBeLessThanOrEqual(layout.viewportWidth);
-  expect(layout.inspectorLeft).toBeLessThan(80);
 });
