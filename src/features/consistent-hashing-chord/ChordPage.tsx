@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { MobilePlaybackDock } from "../../components/MobilePlaybackDock";
+import { StepTimeline } from "../../components/StepTimeline";
 import { usePlaybackShortcuts } from "../../hooks/usePlaybackShortcuts";
 import { chordCodeExamples } from "./codeExamples";
 import { ChordCodePanel } from "./components/ChordCodePanel";
@@ -218,6 +219,14 @@ export function ChordPage() {
             step={activeStep}
             focusedNodeId={focusedNodeId}
             onFocusedNodeChange={setInspectedNodeId}
+          />
+          <StepTimeline
+            steps={steps}
+            currentStepIndex={currentStepIndex}
+            onSelectStep={(index) => {
+              setIsPlaying(false);
+              setCurrentStepIndex(index);
+            }}
           />
           <ChordCodePanel
             step={activeStep}

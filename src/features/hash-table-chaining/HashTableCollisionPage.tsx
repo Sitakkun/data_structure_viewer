@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { MobilePlaybackDock } from "../../components/MobilePlaybackDock";
+import { StepTimeline } from "../../components/StepTimeline";
 import { usePlaybackShortcuts } from "../../hooks/usePlaybackShortcuts";
 import { hashTableCodeExamplesByStrategy } from "./codeExamples";
 import { CodeExamplesPanel } from "./components/CodeExamplesPanel";
@@ -274,6 +275,14 @@ export function HashTableCollisionPage() {
             step={activeStep}
             title={currentLesson.heroTitle}
             subtitle={currentLesson.visualizationSubtitle}
+          />
+          <StepTimeline
+            steps={steps}
+            currentStepIndex={currentStepIndex}
+            onSelectStep={(index) => {
+              setIsPlaying(false);
+              setCurrentStepIndex(index);
+            }}
           />
           <CodeExamplesPanel
             step={activeStep}

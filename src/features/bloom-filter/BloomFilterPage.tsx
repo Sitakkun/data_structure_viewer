@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { MobilePlaybackDock } from "../../components/MobilePlaybackDock";
+import { StepTimeline } from "../../components/StepTimeline";
 import { usePlaybackShortcuts } from "../../hooks/usePlaybackShortcuts";
 import { bloomCodeExamples } from "./codeExamples";
 import { BloomFilterCodePanel } from "./components/BloomFilterCodePanel";
@@ -205,6 +206,14 @@ export function BloomFilterPage() {
 
         <div className="visual-column">
           <BloomFilterView bloomState={displayedState} step={activeStep} />
+          <StepTimeline
+            steps={steps}
+            currentStepIndex={currentStepIndex}
+            onSelectStep={(index) => {
+              setIsPlaying(false);
+              setCurrentStepIndex(index);
+            }}
+          />
           <BloomFilterCodePanel
             step={activeStep}
             fallbackOperation={fallbackOperation}

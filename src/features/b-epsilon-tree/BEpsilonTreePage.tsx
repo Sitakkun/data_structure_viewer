@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { MobilePlaybackDock } from "../../components/MobilePlaybackDock";
+import { StepTimeline } from "../../components/StepTimeline";
 import { usePlaybackShortcuts } from "../../hooks/usePlaybackShortcuts";
 import { bEpsilonCodeExamples } from "./codeExamples";
 import { BEpsilonTreeCodePanel } from "./components/BEpsilonTreeCodePanel";
@@ -231,6 +232,14 @@ export function BEpsilonTreePage() {
 
         <div className="visual-column">
           <BEpsilonTreeView bepsilonState={displayedState} step={activeStep} />
+          <StepTimeline
+            steps={steps}
+            currentStepIndex={currentStepIndex}
+            onSelectStep={(index) => {
+              setIsPlaying(false);
+              setCurrentStepIndex(index);
+            }}
+          />
           <BEpsilonTreeCodePanel
             step={activeStep}
             fallbackOperation={fallbackOperation}

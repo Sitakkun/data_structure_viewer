@@ -158,6 +158,29 @@ test("runs B-tree range scan and exposes cost comparison", async ({ page }) => {
   await expect(inspector(page)).toContainText("Step comparison");
 });
 
+test("shows a clickable step timeline with named milestones", async ({ page }) => {
+  await openApp(page);
+  await selectTopic(page, "B-tree");
+
+  await loadScenario(page, "根ノードを分割する");
+
+  const timeline = page.getByLabel("Step timeline");
+  await expect(timeline).toBeVisible();
+  await expect(timeline).toContainText("根ノードを分割");
+
+  await timeline
+    .getByRole("button", { name: "Step 2: 内部ノードを走査" })
+    .click();
+
+  await expect(inspectorHeading(page)).toHaveText("内部ノードを走査");
+  await expect(timeline.locator("[aria-current='step']")).toContainText(
+    "内部ノードを走査",
+  );
+  await expect(page.locator(".panel-code")).toContainText(
+    "現在ノードのキーを順に比べ",
+  );
+});
+
 test("runs B+ Tree leaf-chain range scan", async ({ page }) => {
   await openApp(page);
   await selectTopic(page, "B+ Tree");
@@ -286,6 +309,7 @@ test("keeps mobile panel order and playback dock", async ({ page }) => {
       ".panel-controls",
       ".panel-visualizer",
       ".panel-inspector",
+      ".panel-timeline",
       ".panel-code",
     ].map((selector) => {
       const element = document.querySelector(selector);
@@ -293,7 +317,7 @@ test("keeps mobile panel order and playback dock", async ({ page }) => {
     }),
   );
 
-  expect(panelOrders).toEqual(["1", "2", "3", "4"]);
+  expect(panelOrders).toEqual(["1", "2", "3", "4", "5"]);
 });
 
 test("keeps iPad mini landscape panels from overlapping", async ({ page }) => {

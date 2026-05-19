@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { MobilePlaybackDock } from "../../components/MobilePlaybackDock";
+import { StepTimeline } from "../../components/StepTimeline";
 import { usePlaybackShortcuts } from "../../hooks/usePlaybackShortcuts";
 import { bufferPoolCodeExamples } from "./codeExamples";
 import { BufferPoolCodePanel } from "./components/BufferPoolCodePanel";
@@ -254,6 +255,14 @@ export function BufferPoolPage() {
 
         <div className="visual-column">
           <BufferPoolView bufferState={displayedState} step={activeStep} />
+          <StepTimeline
+            steps={steps}
+            currentStepIndex={currentStepIndex}
+            onSelectStep={(index) => {
+              setIsPlaying(false);
+              setCurrentStepIndex(index);
+            }}
+          />
           <BufferPoolCodePanel
             step={activeStep}
             fallbackOperation={fallbackOperation}

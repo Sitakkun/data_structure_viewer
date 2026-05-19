@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { MobilePlaybackDock } from "../../components/MobilePlaybackDock";
+import { StepTimeline } from "../../components/StepTimeline";
 import { usePlaybackShortcuts } from "../../hooks/usePlaybackShortcuts";
 import { lsmCodeExamples } from "./codeExamples";
 import { LSMCodePanel } from "./components/LSMCodePanel";
@@ -227,6 +228,14 @@ export function LSMTreePage() {
 
         <div className="visual-column">
           <LSMView lsmState={displayedState} step={activeStep} />
+          <StepTimeline
+            steps={steps}
+            currentStepIndex={currentStepIndex}
+            onSelectStep={(index) => {
+              setIsPlaying(false);
+              setCurrentStepIndex(index);
+            }}
+          />
           <LSMCodePanel
             step={activeStep}
             fallbackOperation={fallbackOperation}

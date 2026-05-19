@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { MobilePlaybackDock } from "../../components/MobilePlaybackDock";
+import { StepTimeline } from "../../components/StepTimeline";
 import { usePlaybackShortcuts } from "../../hooks/usePlaybackShortcuts";
 import { buildBPlusTreeStepComparison } from "../treeStepComparison";
 import { bplusTreeCodeExamples } from "./codeExamples";
@@ -272,6 +273,14 @@ export function BPlusTreePage() {
 
         <div className="visual-column">
           <BPlusTreeView bplusTreeState={displayedState} step={activeStep} />
+          <StepTimeline
+            steps={steps}
+            currentStepIndex={currentStepIndex}
+            onSelectStep={(index) => {
+              setIsPlaying(false);
+              setCurrentStepIndex(index);
+            }}
+          />
           <BPlusTreeCodePanel
             step={activeStep}
             fallbackOperation={fallbackOperation}

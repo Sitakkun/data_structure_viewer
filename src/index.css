@@ -446,6 +446,100 @@ button {
   background: rgba(36, 107, 100, 0.08);
 }
 
+.panel-timeline {
+  padding: 18px;
+}
+
+.step-timeline-summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.step-timeline-summary::-webkit-details-marker {
+  display: none;
+}
+
+.panel-timeline:not([open]) .step-timeline-summary {
+  margin-bottom: 0;
+}
+
+.step-timeline-summary strong {
+  display: block;
+  font-size: 1.1rem;
+}
+
+.step-timeline-current {
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(36, 107, 100, 0.08);
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.step-timeline-list {
+  display: grid;
+  gap: 8px;
+  max-height: 260px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.step-timeline-button {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 15px;
+  border: 1px solid rgba(23, 32, 51, 0.07);
+  background: rgba(255, 255, 255, 0.68);
+  color: #172033;
+  text-align: left;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.step-timeline-button:hover {
+  transform: translateY(-1px);
+}
+
+.step-timeline-button.is-active {
+  border-color: rgba(213, 105, 52, 0.36);
+  background: rgba(213, 105, 52, 0.12);
+}
+
+.step-timeline-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  min-height: 30px;
+  border-radius: 999px;
+  background: rgba(36, 107, 100, 0.1);
+  color: var(--teal);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.step-timeline-title {
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
 .range-input-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2044,8 +2138,12 @@ button {
     order: 3;
   }
 
-  .panel-code {
+  .panel-timeline {
     order: 4;
+  }
+
+  .panel-code {
+    order: 5;
   }
 
   .panel {
@@ -2118,6 +2216,7 @@ button {
   }
 
   .scenario-card,
+  .step-timeline-button,
   .strategy-button {
     padding: 12px;
   }
@@ -2189,9 +2288,22 @@ button {
   .detail-card,
   .concept-card,
   .watch-points-card,
+  .panel-timeline,
   .code-card {
     padding: 12px;
     border-radius: 16px;
+  }
+
+  .step-timeline-summary {
+    gap: 10px;
+  }
+
+  .step-timeline-current {
+    white-space: nowrap;
+  }
+
+  .step-timeline-list {
+    max-height: 36vh;
   }
 
   .stat-card strong,
