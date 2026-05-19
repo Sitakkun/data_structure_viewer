@@ -39,6 +39,9 @@ export function BloomFilterPage() {
   const [scenarioDescription, setScenarioDescription] = useState(
     emptyBloomScenario.description,
   );
+  const [scenarioWatchPoints, setScenarioWatchPoints] = useState<string[]>(
+    emptyBloomScenario.watchPoints ?? [],
+  );
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(900);
   const [selectedLanguage, setSelectedLanguage] =
@@ -72,6 +75,7 @@ export function BloomFilterPage() {
     setSelectedScenarioId(scenario.id);
     setScenarioTitle(scenario.title);
     setScenarioDescription(scenario.description);
+    setScenarioWatchPoints(scenario.watchPoints ?? []);
     setBaseState(cloneBloomState(scenario.baseState));
     setCommittedState(cloneBloomState(scenario.finalState));
     setSteps(
@@ -92,6 +96,7 @@ export function BloomFilterPage() {
     setScenarioDescription(
       "手動操作で生成したステップです。Reset で操作前のフィルター状態に戻れます。",
     );
+    setScenarioWatchPoints([]);
     setBaseState(cloneBloomState(committedState));
     setCommittedState(cloneBloomState(finalState));
     setSteps(
@@ -214,6 +219,7 @@ export function BloomFilterPage() {
           bloomState={displayedState}
           scenarioTitle={scenarioTitle}
           scenarioDescription={scenarioDescription}
+          watchPoints={scenarioWatchPoints}
         />
       </div>
       <MobilePlaybackDock

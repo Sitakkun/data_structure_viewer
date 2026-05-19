@@ -3,12 +3,14 @@ import {
   calculateSize,
   calculateTotalCollisions,
 } from "../simulation";
+import { ScenarioWatchPoints } from "../../../components/ScenarioWatchPoints";
 
 interface StepInspectorProps {
   step?: Step;
   tableState: TableState;
   currentScenarioTitle: string;
   currentScenarioDescription: string;
+  watchPoints?: string[];
   conceptTitle: string;
   conceptNote: string;
 }
@@ -22,6 +24,7 @@ export function StepInspector({
   tableState,
   currentScenarioTitle,
   currentScenarioDescription,
+  watchPoints,
   conceptTitle,
   conceptNote,
 }: StepInspectorProps) {
@@ -37,6 +40,8 @@ export function StepInspector({
           {step?.explanation ?? currentScenarioDescription}
         </p>
       </div>
+
+      <ScenarioWatchPoints watchPoints={watchPoints} isVisible={!step} />
 
       <div className="stats-grid">
         <div className="stat-card">

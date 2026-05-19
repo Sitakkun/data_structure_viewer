@@ -55,6 +55,9 @@ export function PaxosPage() {
   const [scenarioDescription, setScenarioDescription] = useState(
     seededPaxosScenario.description,
   );
+  const [scenarioWatchPoints, setScenarioWatchPoints] = useState<string[]>(
+    seededPaxosScenario.watchPoints ?? [],
+  );
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(900);
   const [selectedLanguage, setSelectedLanguage] =
@@ -89,6 +92,7 @@ export function PaxosPage() {
     setSelectedScenarioId(scenario.id);
     setScenarioTitle(scenario.title);
     setScenarioDescription(scenario.description);
+    setScenarioWatchPoints(scenario.watchPoints ?? []);
     setBaseState(clonePaxosState(scenario.baseState));
     setCommittedState(clonePaxosState(scenario.finalState));
     setSteps(clonePaxosSteps(scenario.steps));
@@ -104,6 +108,7 @@ export function PaxosPage() {
     setScenarioDescription(
       "手動操作で生成した Paxos ステップです。Reset で操作前の状態に戻れます。",
     );
+    setScenarioWatchPoints([]);
     setBaseState(clonePaxosState(committedState));
     setCommittedState(clonePaxosState(finalState));
     setSteps(cloneSteps(nextSteps));
@@ -227,6 +232,7 @@ export function PaxosPage() {
           paxosState={displayedState}
           scenarioTitle={scenarioTitle}
           scenarioDescription={scenarioDescription}
+          watchPoints={scenarioWatchPoints}
         />
       </div>
       <MobilePlaybackDock

@@ -1,4 +1,5 @@
 import { getBEpsilonMetrics } from "../simulation";
+import { ScenarioWatchPoints } from "../../../components/ScenarioWatchPoints";
 import { BEpsilonState, BEpsilonStep } from "../types";
 
 interface BEpsilonTreeInspectorProps {
@@ -6,6 +7,7 @@ interface BEpsilonTreeInspectorProps {
   bepsilonState: BEpsilonState;
   scenarioTitle: string;
   scenarioDescription: string;
+  watchPoints?: string[];
 }
 
 export function BEpsilonTreeInspector({
@@ -13,6 +15,7 @@ export function BEpsilonTreeInspector({
   bepsilonState,
   scenarioTitle,
   scenarioDescription,
+  watchPoints,
 }: BEpsilonTreeInspectorProps) {
   const metrics = step?.metrics ?? getBEpsilonMetrics(bepsilonState);
 
@@ -23,6 +26,8 @@ export function BEpsilonTreeInspector({
         <h2>{step?.title ?? scenarioTitle}</h2>
         <p className="panel-copy">{step?.explanation ?? scenarioDescription}</p>
       </div>
+
+      <ScenarioWatchPoints watchPoints={watchPoints} isVisible={!step} />
 
       <div className="stats-grid">
         <div className="stat-card">

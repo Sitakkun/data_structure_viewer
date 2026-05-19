@@ -57,6 +57,9 @@ export function BEpsilonTreePage() {
   const [scenarioDescription, setScenarioDescription] = useState(
     seededBEpsilonScenario.description,
   );
+  const [scenarioWatchPoints, setScenarioWatchPoints] = useState<string[]>(
+    seededBEpsilonScenario.watchPoints ?? [],
+  );
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(900);
   const [selectedLanguage, setSelectedLanguage] =
@@ -91,6 +94,7 @@ export function BEpsilonTreePage() {
     setSelectedScenarioId(scenario.id);
     setScenarioTitle(scenario.title);
     setScenarioDescription(scenario.description);
+    setScenarioWatchPoints(scenario.watchPoints ?? []);
     setBaseState(cloneBEpsilonState(scenario.baseState));
     setCommittedState(cloneBEpsilonState(scenario.finalState));
     setSteps(cloneScenarioSteps(scenario));
@@ -107,6 +111,7 @@ export function BEpsilonTreePage() {
     setScenarioDescription(
       "手動操作で生成したステップです。Reset で操作前の木に戻れます。",
     );
+    setScenarioWatchPoints([]);
     setBaseState(cloneBEpsilonState(committedState));
     setCommittedState(cloneBEpsilonState(finalState));
     setSteps(cloneSteps(nextSteps));
@@ -240,6 +245,7 @@ export function BEpsilonTreePage() {
           bepsilonState={displayedState}
           scenarioTitle={scenarioTitle}
           scenarioDescription={scenarioDescription}
+          watchPoints={scenarioWatchPoints}
         />
       </div>
       <MobilePlaybackDock

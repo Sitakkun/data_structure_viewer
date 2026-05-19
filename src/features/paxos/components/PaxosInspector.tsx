@@ -1,3 +1,4 @@
+import { ScenarioWatchPoints } from "../../../components/ScenarioWatchPoints";
 import { PaxosState, PaxosStep } from "../types";
 
 interface PaxosInspectorProps {
@@ -5,6 +6,7 @@ interface PaxosInspectorProps {
   paxosState: PaxosState;
   scenarioTitle: string;
   scenarioDescription: string;
+  watchPoints?: string[];
 }
 
 function countRejected(state: PaxosState) {
@@ -19,6 +21,7 @@ export function PaxosInspector({
   paxosState,
   scenarioTitle,
   scenarioDescription,
+  watchPoints,
 }: PaxosInspectorProps) {
   const activeProposer = step?.highlights.activeProposerId
     ? paxosState.proposers.find(
@@ -37,6 +40,8 @@ export function PaxosInspector({
         <h2>{step?.title ?? scenarioTitle}</h2>
         <p className="panel-copy">{step?.explanation ?? scenarioDescription}</p>
       </div>
+
+      <ScenarioWatchPoints watchPoints={watchPoints} isVisible={!step} />
 
       <div className="stats-grid">
         <div className="stat-card">

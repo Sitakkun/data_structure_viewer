@@ -25,6 +25,10 @@ function inspectorHeading(page: Page) {
   return inspector(page).locator("h2");
 }
 
+function watchPoints(page: Page) {
+  return inspector(page).getByLabel("What to watch before playback");
+}
+
 async function clickControl(page: Page, name: string) {
   await controls(page).getByRole("button", { name, exact: true }).click();
 }
@@ -76,6 +80,36 @@ test("navigates all study pages", async ({ page }) => {
       page.getByRole("heading", { name: heading, level: 1 }),
     ).toBeVisible();
   }
+});
+
+test("shows guided what-to-watch prompts before playback", async ({ page }) => {
+  await openApp(page);
+
+  const topics = [
+    "Hash Table Collision",
+    "B-tree",
+    "B+ Tree",
+    "Bε Tree",
+    "LSM-tree",
+    "Bloom Filter",
+    "Write Amplification",
+    "Buffer Pool",
+    "Paxos",
+    "Consistent Hashing",
+    "Chord",
+  ];
+
+  for (const topic of topics) {
+    await selectTopic(page, topic);
+    await expect(watchPoints(page)).toBeVisible();
+  }
+
+  await selectTopic(page, "Bloom Filter");
+  await loadScenario(page, "要素を挿入する");
+  await expect(watchPoints(page)).toContainText("cherry 自体は保存されず");
+
+  await clickNext(page);
+  await expect(watchPoints(page)).not.toBeVisible();
 });
 
 test("runs Hash Table linear probing with shortcuts and C code view", async ({ page }) => {

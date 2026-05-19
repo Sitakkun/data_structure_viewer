@@ -40,6 +40,10 @@ export const emptyHashRingScenario: RingScenario = {
   id: "hash-ring-empty",
   title: "空のハッシュリング",
   description: "ここからリソース登録、担当ノード探索、ノード追加・削除を試せます。",
+  watchPoints: [
+    "リソースの hash 位置から時計回りに最初のノードを探す点を見る。",
+    "ノード追加・削除で全体ではなく一部のリソースだけが動く点を見る。",
+  ],
   baseState: createEmptyRingState(),
   finalState: createEmptyRingState(),
   steps: [],

@@ -71,6 +71,7 @@ export interface ChordScenario {
   id: string;
   title: string;
   description: string;
+  watchPoints?: string[];
   baseState: ChordState;
   finalState: ChordState;
   steps: ChordStep[];

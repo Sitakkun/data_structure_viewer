@@ -1,4 +1,5 @@
 import { TreeStepComparisonCard } from "../../../components/TreeStepComparisonCard";
+import { ScenarioWatchPoints } from "../../../components/ScenarioWatchPoints";
 import { getBTreeCost } from "../../treeCost";
 import { TreeStepComparisonSummary } from "../../treeStepComparison";
 import { BTreeState, BTreeStep } from "../types";
@@ -8,6 +9,7 @@ interface BTreeInspectorProps {
   btreeState: BTreeState;
   scenarioTitle: string;
   scenarioDescription: string;
+  watchPoints?: string[];
   comparison?: TreeStepComparisonSummary;
 }
 
@@ -16,6 +18,7 @@ export function BTreeInspector({
   btreeState,
   scenarioTitle,
   scenarioDescription,
+  watchPoints,
   comparison,
 }: BTreeInspectorProps) {
   const rangeLabel =
@@ -33,6 +36,8 @@ export function BTreeInspector({
         <h2>{step?.title ?? scenarioTitle}</h2>
         <p className="panel-copy">{step?.explanation ?? scenarioDescription}</p>
       </div>
+
+      <ScenarioWatchPoints watchPoints={watchPoints} isVisible={!step} />
 
       <div className="stats-grid">
         <div className="stat-card">

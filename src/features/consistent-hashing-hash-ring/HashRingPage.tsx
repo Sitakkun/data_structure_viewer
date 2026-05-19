@@ -44,6 +44,9 @@ export function HashRingPage() {
   const [scenarioDescription, setScenarioDescription] = useState(
     emptyHashRingScenario.description,
   );
+  const [scenarioWatchPoints, setScenarioWatchPoints] = useState<string[]>(
+    emptyHashRingScenario.watchPoints ?? [],
+  );
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(900);
   const [selectedLanguage, setSelectedLanguage] =
@@ -78,6 +81,7 @@ export function HashRingPage() {
     setSelectedScenarioId(scenario.id);
     setScenarioTitle(scenario.title);
     setScenarioDescription(scenario.description);
+    setScenarioWatchPoints(scenario.watchPoints ?? []);
     setBaseState(cloneRingState(scenario.baseState));
     setCommittedState(cloneRingState(scenario.finalState));
     setSteps(
@@ -98,6 +102,7 @@ export function HashRingPage() {
     setScenarioDescription(
       "手動操作で生成したステップです。Reset で操作前のリングに戻れます。",
     );
+    setScenarioWatchPoints([]);
     setBaseState(cloneRingState(committedState));
     setCommittedState(cloneRingState(finalState));
     setSteps(
@@ -250,6 +255,7 @@ export function HashRingPage() {
           ringState={displayedState}
           scenarioTitle={scenarioTitle}
           scenarioDescription={scenarioDescription}
+          watchPoints={scenarioWatchPoints}
         />
       </div>
       <MobilePlaybackDock

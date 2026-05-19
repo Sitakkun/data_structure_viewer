@@ -1,3 +1,4 @@
+import { ScenarioWatchPoints } from "../../../components/ScenarioWatchPoints";
 import { BloomState, BloomStep } from "../types";
 
 interface BloomFilterInspectorProps {
@@ -5,6 +6,7 @@ interface BloomFilterInspectorProps {
   bloomState: BloomState;
   scenarioTitle: string;
   scenarioDescription: string;
+  watchPoints?: string[];
 }
 
 export function BloomFilterInspector({
@@ -12,6 +14,7 @@ export function BloomFilterInspector({
   bloomState,
   scenarioTitle,
   scenarioDescription,
+  watchPoints,
 }: BloomFilterInspectorProps) {
   return (
     <aside className="panel panel-inspector">
@@ -20,6 +23,8 @@ export function BloomFilterInspector({
         <h2>{step?.title ?? scenarioTitle}</h2>
         <p className="panel-copy">{step?.explanation ?? scenarioDescription}</p>
       </div>
+
+      <ScenarioWatchPoints watchPoints={watchPoints} isVisible={!step} />
 
       <div className="stats-grid">
         <div className="stat-card">

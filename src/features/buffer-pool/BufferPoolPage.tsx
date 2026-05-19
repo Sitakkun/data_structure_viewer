@@ -54,6 +54,9 @@ export function BufferPoolPage() {
   const [scenarioDescription, setScenarioDescription] = useState(
     initialScenario.description,
   );
+  const [scenarioWatchPoints, setScenarioWatchPoints] = useState<string[]>(
+    initialScenario.watchPoints ?? [],
+  );
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(900);
   const [selectedLanguage, setSelectedLanguage] =
@@ -87,6 +90,7 @@ export function BufferPoolPage() {
     setSelectedScenarioId(scenario.id);
     setScenarioTitle(scenario.title);
     setScenarioDescription(scenario.description);
+    setScenarioWatchPoints(scenario.watchPoints ?? []);
     setBaseState(cloneBufferPoolState(scenario.baseState));
     setCommittedState(cloneBufferPoolState(scenario.finalState));
     setSteps(cloneBufferPoolSteps(scenario.steps));
@@ -107,6 +111,7 @@ export function BufferPoolPage() {
     setScenarioDescription(
       "手動操作で生成した buffer pool ステップです。Reset で操作前の状態に戻れます。",
     );
+    setScenarioWatchPoints([]);
     setBaseState(withPolicy(committedState, selectedPolicy));
     setCommittedState(cloneBufferPoolState(finalState));
     setSteps(cloneSteps(nextSteps));
@@ -263,6 +268,7 @@ export function BufferPoolPage() {
           bufferState={displayedState}
           scenarioTitle={scenarioTitle}
           scenarioDescription={scenarioDescription}
+          watchPoints={scenarioWatchPoints}
         />
       </div>
       <MobilePlaybackDock

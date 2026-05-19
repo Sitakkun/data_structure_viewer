@@ -2,13 +2,19 @@ import { buildBloomScenario, createEmptyBloomState } from "./simulation";
 import { BloomScenario } from "./types";
 
 export const bloomScenarios: BloomScenario[] = [
-  buildBloomScenario(
-    "bloom-insert",
-    "要素を挿入する",
-    "Bloom Filter では元の要素を保存せず、複数ハッシュの位置だけを 1 にします。",
-    ["apple", "banana"],
-    { type: "insert", item: "cherry" },
-  ),
+  {
+    ...buildBloomScenario(
+      "bloom-insert",
+      "要素を挿入する",
+      "Bloom Filter では元の要素を保存せず、複数ハッシュの位置だけを 1 にします。",
+      ["apple", "banana"],
+      { type: "insert", item: "cherry" },
+    ),
+    watchPoints: [
+      "cherry 自体は保存されず、複数の bit だけが 1 になる点を見る。",
+      "すでに 1 の bit に衝突しても区別できない点を見る。",
+    ],
+  },
   buildBloomScenario(
     "bloom-query-hit",
     "登録済み要素を照会する",
@@ -36,6 +42,10 @@ export const emptyBloomScenario: BloomScenario = {
   id: "bloom-empty",
   title: "空の Bloom Filter",
   description: "ここから要素の挿入や照会を試せます。",
+  watchPoints: [
+    "元の要素ではなく、複数ハッシュで得た bit 位置だけを保存する点を見る。",
+    "Query で 0 の bit があると未登録を断定できる点を見る。",
+  ],
   baseState: createEmptyBloomState(),
   finalState: createEmptyBloomState(),
   steps: [],

@@ -13,6 +13,10 @@ export const seededLSMScenario: LSMScenario = {
   title: "LSM-tree with memtable and SSTables",
   description:
     "memtable、WAL、複数 SSTable がある状態から、write / search / tombstone / compaction を試せます。",
+  watchPoints: [
+    "write が WAL と memtable に入り、SSTable をすぐ書き換えない点を見る。",
+    "search は memtable から新しい SSTable 順に探す点を見る。",
+  ],
   baseState: createSeededLSMState(),
   finalState: createSeededLSMState(),
   steps: [],

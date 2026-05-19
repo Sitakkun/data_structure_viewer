@@ -13,6 +13,10 @@ export const seededBEpsilonScenario: BEpsilonScenario = {
   title: "Buffered Bε-style Tree",
   description:
     "固定 fanout の小さな木で、insert/delete を message として buffer に貯め、flush で下位ノードへまとめて送る動きを確認できます。",
+  watchPoints: [
+    "更新をすぐ葉へ送らず、内部ノードの buffer に貯める点を見る。",
+    "flush で複数 message がまとめて下位ノードへ流れる点を見る。",
+  ],
   baseState: createSeededBEpsilonState(),
   finalState: createSeededBEpsilonState(),
   steps: [],

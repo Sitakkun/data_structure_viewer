@@ -46,6 +46,9 @@ export function LSMTreePage() {
   const [scenarioDescription, setScenarioDescription] = useState(
     seededLSMScenario.description,
   );
+  const [scenarioWatchPoints, setScenarioWatchPoints] = useState<string[]>(
+    seededLSMScenario.watchPoints ?? [],
+  );
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(900);
   const [selectedLanguage, setSelectedLanguage] =
@@ -80,6 +83,7 @@ export function LSMTreePage() {
     setSelectedScenarioId(scenario.id);
     setScenarioTitle(scenario.title);
     setScenarioDescription(scenario.description);
+    setScenarioWatchPoints(scenario.watchPoints ?? []);
     setBaseState(cloneLSMState(scenario.baseState));
     setCommittedState(cloneLSMState(scenario.finalState));
     setSteps(cloneLSMScenarioSteps(scenario));
@@ -95,6 +99,7 @@ export function LSMTreePage() {
     setScenarioDescription(
       "手動操作で生成したステップです。Reset で操作前の状態に戻れます。",
     );
+    setScenarioWatchPoints([]);
     setBaseState(cloneLSMState(committedState));
     setCommittedState(cloneLSMState(finalState));
     setSteps(cloneSteps(nextSteps));
@@ -236,6 +241,7 @@ export function LSMTreePage() {
           lsmState={displayedState}
           scenarioTitle={scenarioTitle}
           scenarioDescription={scenarioDescription}
+          watchPoints={scenarioWatchPoints}
         />
       </div>
       <MobilePlaybackDock

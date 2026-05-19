@@ -15,11 +15,13 @@ function makeScenario(
   description: string,
   baseState: ReturnType<typeof createInitialPaxosState>,
   steps: PaxosStep[],
+  watchPoints?: string[],
 ): PaxosScenario {
   return {
     id,
     title,
     description,
+    watchPoints,
     baseState: clonePaxosState(baseState),
     finalState: clonePaxosState(steps[steps.length - 1]?.paxosState ?? baseState),
     steps: clonePaxosSteps(steps),
@@ -51,6 +53,10 @@ export const seededPaxosScenario = makeScenario(
   "P1 が prepare / promise / accept request / accepted を順に進め、3/5 quorum で A を chosen にします。",
   happyBaseState,
   buildSingleProposerSteps(happyBaseState, "P1", 1, "A"),
+  [
+    "promise だけでは値がまだ決まらず、accepted quorum で chosen になる点を見る。",
+    "quorum size 3/5 がどのステップで満たされるかを見る。",
+  ],
 );
 
 export const paxosScenarios: PaxosScenario[] = [

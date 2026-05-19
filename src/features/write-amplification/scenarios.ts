@@ -10,6 +10,10 @@ export const writeAmplificationScenarios: WriteAmplificationScenario[] = [
     title: "Insert workload",
     description:
       "同じ insert workload を B-tree / Bε tree / LSM-tree に流し、どの層で書き込みが増えるかを比較します。",
+    watchPoints: [
+      "同じ論理 write が、各構造でどの物理 write unit に変換されるかを見る。",
+      "Bε tree と LSM-tree が小さな write を buffer / memtable に集める点を見る。",
+    ],
     config: defaultWorkloadConfig,
     steps: buildWriteAmplificationSteps(defaultWorkloadConfig),
   },

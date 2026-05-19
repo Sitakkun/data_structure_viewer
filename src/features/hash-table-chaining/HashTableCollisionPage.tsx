@@ -105,6 +105,9 @@ export function HashTableCollisionPage() {
   const [scenarioDescription, setScenarioDescription] = useState(
     emptyChainingScenario.description,
   );
+  const [scenarioWatchPoints, setScenarioWatchPoints] = useState<string[]>(
+    emptyChainingScenario.watchPoints ?? [],
+  );
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(900);
   const [selectedLanguage, setSelectedLanguage] =
@@ -139,6 +142,7 @@ export function HashTableCollisionPage() {
     setSelectedScenarioId(scenario.id);
     setScenarioTitle(scenario.title);
     setScenarioDescription(scenario.description);
+    setScenarioWatchPoints(scenario.watchPoints ?? []);
     setBaseState(cloneTableState(scenario.baseState));
     setCommittedState(cloneTableState(scenario.finalState));
     setSteps(
@@ -175,6 +179,7 @@ export function HashTableCollisionPage() {
     setScenarioDescription(
       "手動操作で生成したステップです。Reset で操作前の状態に戻れます。",
     );
+    setScenarioWatchPoints([]);
     setBaseState(cloneTableState(committedState));
     setCommittedState(cloneTableState(result.finalState));
     setSteps(
@@ -285,6 +290,7 @@ export function HashTableCollisionPage() {
           tableState={displayedState}
           currentScenarioTitle={scenarioTitle}
           currentScenarioDescription={scenarioDescription}
+          watchPoints={scenarioWatchPoints}
           conceptTitle={currentLesson.conceptTitle}
           conceptNote={currentLesson.conceptNote}
         />

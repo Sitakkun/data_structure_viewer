@@ -1,3 +1,4 @@
+import { ScenarioWatchPoints } from "../../../components/ScenarioWatchPoints";
 import { engineLabel } from "../simulation";
 import {
   EngineWriteSummary,
@@ -10,6 +11,7 @@ interface WriteAmplificationInspectorProps {
   summaries: Record<WriteEngine, EngineWriteSummary>;
   scenarioTitle: string;
   scenarioDescription: string;
+  watchPoints?: string[];
 }
 
 const engineOrder: WriteEngine[] = ["btree", "bepsilon", "lsm"];
@@ -19,6 +21,7 @@ export function WriteAmplificationInspector({
   summaries,
   scenarioTitle,
   scenarioDescription,
+  watchPoints,
 }: WriteAmplificationInspectorProps) {
   const bestEngine = [...engineOrder].sort(
     (left, right) =>
@@ -32,6 +35,8 @@ export function WriteAmplificationInspector({
         <h2>{step?.title ?? scenarioTitle}</h2>
         <p className="panel-copy">{step?.explanation ?? scenarioDescription}</p>
       </div>
+
+      <ScenarioWatchPoints watchPoints={watchPoints} isVisible={!step} />
 
       <div className="stats-grid">
         {engineOrder.map((engine) => (

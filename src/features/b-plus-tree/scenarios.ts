@@ -92,6 +92,10 @@ export const seededBPlusTreeScenario: BPlusTreeScenario = {
   id: "bplus-seeded",
   title: "初期データ入りの B+ Tree",
   description: "内部ノードのセパレータと葉ノードの連結を確認しながら、手動で挿入、探索、範囲走査を試せます。",
+  watchPoints: [
+    "内部ノードは経路案内、実データは葉にあるという役割分担を見る。",
+    "Range Scan では開始葉まで降りた後、leaf chain をたどる点を見る。",
+  ],
   baseState: createBPlusTreeStateFromKeys([10, 20, 30, 40, 50, 60]),
   finalState: createBPlusTreeStateFromKeys([10, 20, 30, 40, 50, 60]),
   steps: [],

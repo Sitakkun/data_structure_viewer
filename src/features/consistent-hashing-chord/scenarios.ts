@@ -51,6 +51,10 @@ export const emptyChordScenario: ChordScenario = {
   title: "Chord フィンガーテーブル",
   description:
     "開始ノードを選んでリソース探索を実行すると、finger table を使ったジャンプ経路を追えます。",
+  watchPoints: [
+    "各 finger entry がどの区間の successor を指すかを見る。",
+    "lookup が successor を 1 台ずつ辿らず、遠くまで進める finger を選ぶ点を見る。",
+  ],
   baseState: createChordState(baseNodeSpecs, baseResources),
   finalState: createChordState(baseNodeSpecs, baseResources),
   steps: [],

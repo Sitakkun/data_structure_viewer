@@ -1,3 +1,4 @@
+import { ScenarioWatchPoints } from "../../../components/ScenarioWatchPoints";
 import { BufferPoolState, BufferPoolStep } from "../types";
 
 interface BufferPoolInspectorProps {
@@ -5,6 +6,7 @@ interface BufferPoolInspectorProps {
   bufferState: BufferPoolState;
   scenarioTitle: string;
   scenarioDescription: string;
+  watchPoints?: string[];
 }
 
 function formatHitRatio(state: BufferPoolState) {
@@ -20,6 +22,7 @@ export function BufferPoolInspector({
   bufferState,
   scenarioTitle,
   scenarioDescription,
+  watchPoints,
 }: BufferPoolInspectorProps) {
   return (
     <aside className="panel panel-inspector">
@@ -28,6 +31,8 @@ export function BufferPoolInspector({
         <h2>{step?.title ?? scenarioTitle}</h2>
         <p className="panel-copy">{step?.explanation ?? scenarioDescription}</p>
       </div>
+
+      <ScenarioWatchPoints watchPoints={watchPoints} isVisible={!step} />
 
       <div className="stats-grid">
         <div className="stat-card">

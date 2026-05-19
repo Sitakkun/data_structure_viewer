@@ -63,6 +63,7 @@ export interface BTreeScenario {
   id: string;
   title: string;
   description: string;
+  watchPoints?: string[];
   baseState: BTreeState;
   finalState: BTreeState;
   steps: BTreeStep[];
