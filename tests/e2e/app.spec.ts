@@ -295,3 +295,30 @@ test("keeps mobile panel order and playback dock", async ({ page }) => {
 
   expect(panelOrders).toEqual(["1", "2", "3", "4"]);
 });
+
+test("keeps iPad mini landscape panels from overlapping", async ({ page }) => {
+  await page.setViewportSize({ width: 1133, height: 744 });
+  await openApp(page);
+  await selectTopic(page, "B+ Tree");
+
+  const layout = await page.evaluate(() => {
+    const visualizer = document
+      .querySelector(".panel-visualizer")
+      ?.getBoundingClientRect();
+    const inspector = document
+      .querySelector(".panel-inspector")
+      ?.getBoundingClientRect();
+
+    return {
+      visualizerBottom: visualizer?.bottom ?? 0,
+      inspectorTop: inspector?.top ?? 0,
+      inspectorLeft: inspector?.left ?? 0,
+      visualizerRight: visualizer?.right ?? 0,
+      viewportWidth: window.innerWidth,
+    };
+  });
+
+  expect(layout.inspectorTop).toBeGreaterThan(layout.visualizerBottom);
+  expect(layout.visualizerRight).toBeLessThanOrEqual(layout.viewportWidth);
+  expect(layout.inspectorLeft).toBeLessThan(80);
+});
