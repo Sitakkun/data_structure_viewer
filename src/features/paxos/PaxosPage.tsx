@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { MobilePlaybackDock } from "../../components/MobilePlaybackDock";
+import { StepTimeline } from "../../components/StepTimeline";
 import { usePlaybackShortcuts } from "../../hooks/usePlaybackShortcuts";
 import { paxosCodeExamples } from "./codeExamples";
 import { PaxosCodePanel } from "./components/PaxosCodePanel";
@@ -218,6 +219,14 @@ export function PaxosPage() {
 
         <div className="visual-column">
           <PaxosView paxosState={displayedState} step={activeStep} />
+          <StepTimeline
+            steps={steps}
+            currentStepIndex={currentStepIndex}
+            onSelectStep={(index) => {
+              setIsPlaying(false);
+              setCurrentStepIndex(index);
+            }}
+          />
           <PaxosCodePanel
             step={activeStep}
             fallbackOperation={fallbackOperation}

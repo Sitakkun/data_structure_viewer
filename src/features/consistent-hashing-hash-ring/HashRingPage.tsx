@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { MobilePlaybackDock } from "../../components/MobilePlaybackDock";
+import { StepTimeline } from "../../components/StepTimeline";
 import { usePlaybackShortcuts } from "../../hooks/usePlaybackShortcuts";
 import { hashRingCodeExamples } from "./codeExamples";
 import { HashRingCodePanel } from "./components/HashRingCodePanel";
@@ -241,6 +242,14 @@ export function HashRingPage() {
 
         <div className="visual-column">
           <HashRingView ringState={displayedState} step={activeStep} />
+          <StepTimeline
+            steps={steps}
+            currentStepIndex={currentStepIndex}
+            onSelectStep={(index) => {
+              setIsPlaying(false);
+              setCurrentStepIndex(index);
+            }}
+          />
           <HashRingCodePanel
             step={activeStep}
             fallbackOperation={fallbackOperation}

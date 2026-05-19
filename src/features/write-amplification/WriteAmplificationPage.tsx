@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { MobilePlaybackDock } from "../../components/MobilePlaybackDock";
+import { StepTimeline } from "../../components/StepTimeline";
 import { usePlaybackShortcuts } from "../../hooks/usePlaybackShortcuts";
 import { writeAmplificationCodeExamples } from "./codeExamples";
 import { WriteAmplificationCodePanel } from "./components/WriteAmplificationCodePanel";
@@ -193,6 +194,14 @@ export function WriteAmplificationPage() {
 
         <div className="visual-column">
           <WriteAmplificationFlowView step={activeStep} summaries={summaries} />
+          <StepTimeline
+            steps={steps}
+            currentStepIndex={currentStepIndex}
+            onSelectStep={(index) => {
+              setIsPlaying(false);
+              setCurrentStepIndex(index);
+            }}
+          />
           <WriteAmplificationCodePanel
             selectedEngine={selectedCodeEngine}
             onEngineChange={setSelectedCodeEngine}
