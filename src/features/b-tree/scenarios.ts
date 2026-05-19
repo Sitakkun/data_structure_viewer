@@ -80,6 +80,10 @@ export const seededBTreeScenario: BTreeScenario = {
   id: "btree-seeded",
   title: "初期データ入りの B ツリー",
   description: "分割、探索、範囲走査の手動確認に使う初期状態です。",
+  watchPoints: [
+    "根から葉まで、必要な部分木だけに絞って進む経路を見る。",
+    "挿入・削除・範囲走査で Cost 表示がどう変わるかを見る。",
+  ],
   baseState: createBTreeStateFromKeys([10, 20, 30, 40, 50, 60]),
   finalState: createBTreeStateFromKeys([10, 20, 30, 40, 50, 60]),
   steps: [],

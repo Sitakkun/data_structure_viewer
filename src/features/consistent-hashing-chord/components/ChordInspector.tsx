@@ -1,3 +1,4 @@
+import { ScenarioWatchPoints } from "../../../components/ScenarioWatchPoints";
 import { ChordState, ChordStep } from "../types";
 
 interface ChordInspectorProps {
@@ -5,6 +6,7 @@ interface ChordInspectorProps {
   chordState: ChordState;
   scenarioTitle: string;
   scenarioDescription: string;
+  watchPoints?: string[];
   focusedNodeId?: string;
 }
 
@@ -13,6 +15,7 @@ export function ChordInspector({
   chordState,
   scenarioTitle,
   scenarioDescription,
+  watchPoints,
   focusedNodeId,
 }: ChordInspectorProps) {
   const focusedNode =
@@ -25,6 +28,8 @@ export function ChordInspector({
         <h2>{step?.title ?? scenarioTitle}</h2>
         <p className="panel-copy">{step?.explanation ?? scenarioDescription}</p>
       </div>
+
+      <ScenarioWatchPoints watchPoints={watchPoints} isVisible={!step} />
 
       <div className="stats-grid">
         <div className="stat-card">

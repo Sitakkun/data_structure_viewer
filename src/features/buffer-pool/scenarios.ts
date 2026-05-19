@@ -24,6 +24,10 @@ export const bufferPoolScenarioDefinitions: BufferPoolScenarioDefinition[] = [
     title: "Hot pages stay cached",
     description:
       "同じ page を繰り返し参照し、hit が増えて physical read が減る流れを確認します。",
+    watchPoints: [
+      "同じ page の再参照が hit になり、physical read が増えない点を見る。",
+      "LRU と CLOCK で最近参照された page の扱いがどう違うかを見る。",
+    ],
     actions: [
       { operation: "read", pageId: 1 },
       { operation: "read", pageId: 2 },
@@ -105,6 +109,7 @@ export function createBufferPoolScenario(
     id: definition.id,
     title: definition.title,
     description: `${definition.description} 現在の policy: ${policy.toUpperCase()}。`,
+    watchPoints: definition.watchPoints,
     baseState: cloneBufferPoolState(baseState),
     finalState: cloneBufferPoolState(steps[steps.length - 1]?.bufferState ?? baseState),
     steps: cloneBufferPoolSteps(steps),

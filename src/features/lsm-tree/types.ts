@@ -68,6 +68,7 @@ export interface LSMScenario {
   id: string;
   title: string;
   description: string;
+  watchPoints?: string[];
   baseState: LSMState;
   finalState: LSMState;
   steps: LSMStep[];

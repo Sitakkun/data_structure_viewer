@@ -696,7 +696,8 @@ button {
 
 .stat-card,
 .detail-card,
-.concept-card {
+.concept-card,
+.watch-points-card {
   padding: 14px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.66);
@@ -705,22 +706,38 @@ button {
 
 .stat-card span,
 .detail-card span,
-.concept-card span {
+.concept-card span,
+.watch-points-card li {
   display: block;
   color: var(--ink-soft);
   font-size: 0.9rem;
 }
 
 .stat-card strong,
-.detail-card strong {
+.detail-card strong,
+.watch-points-card strong {
   display: block;
   margin: 6px 0;
   font-size: 1.25rem;
 }
 
 .detail-card + .detail-card,
-.detail-card + .concept-card {
+.detail-card + .concept-card,
+.watch-points-card + .stats-grid {
   margin-top: 12px;
+}
+
+.watch-points-card {
+  margin-bottom: 16px;
+}
+
+.watch-points-card ul {
+  margin: 10px 0 0;
+  padding-left: 1.1rem;
+}
+
+.watch-points-card li + li {
+  margin-top: 6px;
 }
 
 .language-toggle {
@@ -2159,13 +2176,15 @@ button {
   .stat-card,
   .detail-card,
   .concept-card,
+  .watch-points-card,
   .code-card {
     padding: 12px;
     border-radius: 16px;
   }
 
   .stat-card strong,
-  .detail-card strong {
+  .detail-card strong,
+  .watch-points-card strong {
     font-size: 1.06rem;
     overflow-wrap: anywhere;
   }

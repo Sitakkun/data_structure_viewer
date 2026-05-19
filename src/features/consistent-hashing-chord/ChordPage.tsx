@@ -41,6 +41,9 @@ export function ChordPage() {
   const [scenarioDescription, setScenarioDescription] = useState(
     emptyChordScenario.description,
   );
+  const [scenarioWatchPoints, setScenarioWatchPoints] = useState<string[]>(
+    emptyChordScenario.watchPoints ?? [],
+  );
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(900);
   const [selectedLanguage, setSelectedLanguage] =
@@ -80,6 +83,7 @@ export function ChordPage() {
     setSelectedScenarioId(scenario.id);
     setScenarioTitle(scenario.title);
     setScenarioDescription(scenario.description);
+    setScenarioWatchPoints(scenario.watchPoints ?? []);
     setBaseState(cloneChordState(scenario.baseState));
     setCommittedState(cloneChordState(scenario.finalState));
     setStartNodeId(defaultNodeId);
@@ -102,6 +106,7 @@ export function ChordPage() {
     setScenarioDescription(
       "手動操作で生成したステップです。Reset で操作前のリングに戻れます。",
     );
+    setScenarioWatchPoints([]);
     setBaseState(cloneChordState(committedState));
     setCommittedState(cloneChordState(finalState));
     setSteps(
@@ -228,6 +233,7 @@ export function ChordPage() {
           chordState={displayedState}
           scenarioTitle={scenarioTitle}
           scenarioDescription={scenarioDescription}
+          watchPoints={scenarioWatchPoints}
           focusedNodeId={focusedNodeId}
         />
       </div>

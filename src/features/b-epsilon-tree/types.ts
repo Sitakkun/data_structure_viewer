@@ -75,6 +75,7 @@ export interface BEpsilonScenario {
   id: string;
   title: string;
   description: string;
+  watchPoints?: string[];
   baseState: BEpsilonState;
   finalState: BEpsilonState;
   steps: BEpsilonStep[];

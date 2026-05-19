@@ -101,6 +101,7 @@ export interface PaxosScenario {
   id: string;
   title: string;
   description: string;
+  watchPoints?: string[];
   baseState: PaxosState;
   finalState: PaxosState;
   steps: PaxosStep[];

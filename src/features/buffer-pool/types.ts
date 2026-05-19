@@ -77,6 +77,7 @@ export interface BufferPoolScenario {
   id: string;
   title: string;
   description: string;
+  watchPoints?: string[];
   baseState: BufferPoolState;
   finalState: BufferPoolState;
   steps: BufferPoolStep[];
@@ -91,6 +92,7 @@ export interface BufferPoolScenarioDefinition {
   id: string;
   title: string;
   description: string;
+  watchPoints?: string[];
   actions: BufferPoolAction[];
 }
 

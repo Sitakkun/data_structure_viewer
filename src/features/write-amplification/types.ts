@@ -54,6 +54,7 @@ export interface WriteAmplificationScenario {
   id: string;
   title: string;
   description: string;
+  watchPoints?: string[];
   config: WorkloadConfig;
   steps: WriteAmplificationStep[];
 }

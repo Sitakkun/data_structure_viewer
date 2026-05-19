@@ -1,3 +1,4 @@
+import { ScenarioWatchPoints } from "../../../components/ScenarioWatchPoints";
 import { RingState, RingStep } from "../types";
 
 interface HashRingInspectorProps {
@@ -5,6 +6,7 @@ interface HashRingInspectorProps {
   ringState: RingState;
   scenarioTitle: string;
   scenarioDescription: string;
+  watchPoints?: string[];
 }
 
 export function HashRingInspector({
@@ -12,6 +14,7 @@ export function HashRingInspector({
   ringState,
   scenarioTitle,
   scenarioDescription,
+  watchPoints,
 }: HashRingInspectorProps) {
   return (
     <aside className="panel panel-inspector">
@@ -20,6 +23,8 @@ export function HashRingInspector({
         <h2>{step?.title ?? scenarioTitle}</h2>
         <p className="panel-copy">{step?.explanation ?? scenarioDescription}</p>
       </div>
+
+      <ScenarioWatchPoints watchPoints={watchPoints} isVisible={!step} />
 
       <div className="stats-grid">
         <div className="stat-card">

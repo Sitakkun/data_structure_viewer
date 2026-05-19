@@ -91,6 +91,10 @@ export const emptyLinearProbingScenario: Scenario = {
   id: "linear-probing-empty",
   title: "空のテーブル",
   description: "ここから Insert / Search / Delete を実行できます。",
+  watchPoints: [
+    "開始スロットが埋まっているとき、右へ 1 つずつ進む流れを見る。",
+    "削除時に空スロットではなく tombstone を置く理由を見る。",
+  ],
   baseState: createEmptyLinearProbingTable(bucketCount),
   finalState: createEmptyLinearProbingTable(bucketCount),
   steps: [],

@@ -1,3 +1,4 @@
+import { ScenarioWatchPoints } from "../../../components/ScenarioWatchPoints";
 import { getLSMMetrics } from "../simulation";
 import { LSMState, LSMStep } from "../types";
 
@@ -6,6 +7,7 @@ interface LSMInspectorProps {
   lsmState: LSMState;
   scenarioTitle: string;
   scenarioDescription: string;
+  watchPoints?: string[];
 }
 
 export function LSMInspector({
@@ -13,6 +15,7 @@ export function LSMInspector({
   lsmState,
   scenarioTitle,
   scenarioDescription,
+  watchPoints,
 }: LSMInspectorProps) {
   const metrics = step?.metrics ?? getLSMMetrics(lsmState);
 
@@ -23,6 +26,8 @@ export function LSMInspector({
         <h2>{step?.title ?? scenarioTitle}</h2>
         <p className="panel-copy">{step?.explanation ?? scenarioDescription}</p>
       </div>
+
+      <ScenarioWatchPoints watchPoints={watchPoints} isVisible={!step} />
 
       <div className="stats-grid">
         <div className="stat-card">

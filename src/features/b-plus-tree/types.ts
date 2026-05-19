@@ -68,6 +68,7 @@ export interface BPlusTreeScenario {
   id: string;
   title: string;
   description: string;
+  watchPoints?: string[];
   baseState: BPlusTreeState;
   finalState: BPlusTreeState;
   steps: BPlusTreeStep[];

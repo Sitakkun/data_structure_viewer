@@ -52,6 +52,7 @@ export interface Scenario {
   id: string;
   title: string;
   description: string;
+  watchPoints?: string[];
   baseState: TableState;
   finalState: TableState;
   steps: Step[];

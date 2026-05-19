@@ -48,6 +48,9 @@ export function BTreePage() {
   const [scenarioDescription, setScenarioDescription] = useState(
     seededBTreeScenario.description,
   );
+  const [scenarioWatchPoints, setScenarioWatchPoints] = useState<string[]>(
+    seededBTreeScenario.watchPoints ?? [],
+  );
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(900);
   const [selectedLanguage, setSelectedLanguage] =
@@ -94,6 +97,7 @@ export function BTreePage() {
     setSelectedScenarioId(scenario.id);
     setScenarioTitle(scenario.title);
     setScenarioDescription(scenario.description);
+    setScenarioWatchPoints(scenario.watchPoints ?? []);
     setBaseState(cloneBTreeState(scenario.baseState));
     setCommittedState(cloneBTreeState(scenario.finalState));
     setSteps(
@@ -114,6 +118,7 @@ export function BTreePage() {
     setScenarioDescription(
       "手動操作で生成したステップです。Reset で操作前の木に戻れます。",
     );
+    setScenarioWatchPoints([]);
     setBaseState(cloneBTreeState(committedState));
     setCommittedState(clearRangePlaybackState(finalState));
     setSteps(
@@ -269,6 +274,7 @@ export function BTreePage() {
           btreeState={displayedState}
           scenarioTitle={scenarioTitle}
           scenarioDescription={scenarioDescription}
+          watchPoints={scenarioWatchPoints}
           comparison={comparison}
         />
       </div>

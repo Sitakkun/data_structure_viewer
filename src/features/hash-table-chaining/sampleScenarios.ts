@@ -87,6 +87,10 @@ export const emptyChainingScenario: Scenario = {
   id: "chaining-empty",
   title: "空のテーブル",
   description: "ここから Insert / Search / Delete を実行できます。",
+  watchPoints: [
+    "ハッシュ値がどのバケット番号に変換されるかを見る。",
+    "衝突したキーが上書きされず、同じバケットのチェーンに追加される点を見る。",
+  ],
   baseState: createEmptyTable(bucketCount),
   finalState: createEmptyTable(bucketCount),
   steps: [],

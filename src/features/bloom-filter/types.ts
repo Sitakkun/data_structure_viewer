@@ -42,6 +42,7 @@ export interface BloomScenario {
   id: string;
   title: string;
   description: string;
+  watchPoints?: string[];
   baseState: BloomState;
   finalState: BloomState;
   steps: BloomStep[];

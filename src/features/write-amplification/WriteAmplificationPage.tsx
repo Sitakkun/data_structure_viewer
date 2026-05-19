@@ -56,6 +56,9 @@ export function WriteAmplificationPage() {
   const [scenarioDescription, setScenarioDescription] = useState(
     initialScenario.description,
   );
+  const [scenarioWatchPoints, setScenarioWatchPoints] = useState<string[]>(
+    initialScenario.watchPoints ?? [],
+  );
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(900);
   const [selectedCodeEngine, setSelectedCodeEngine] =
@@ -91,6 +94,7 @@ export function WriteAmplificationPage() {
     setSelectedScenarioId(scenario.id);
     setScenarioTitle(scenario.title);
     setScenarioDescription(scenario.description);
+    setScenarioWatchPoints(scenario.watchPoints ?? []);
     setConfig(scenario.config);
     setSteps(cloneSteps(scenario.steps));
     setCurrentStepIndex(-1);
@@ -105,6 +109,7 @@ export function WriteAmplificationPage() {
     setScenarioDescription(
       "操作パネルの設定で生成した比較です。Reset でステップ先頭前に戻れます。",
     );
+    setScenarioWatchPoints([]);
     setSteps(cloneSteps(nextSteps));
     setCurrentStepIndex(-1);
   }
@@ -202,6 +207,7 @@ export function WriteAmplificationPage() {
           summaries={summaries}
           scenarioTitle={scenarioTitle}
           scenarioDescription={scenarioDescription}
+          watchPoints={scenarioWatchPoints}
         />
       </div>
       <MobilePlaybackDock

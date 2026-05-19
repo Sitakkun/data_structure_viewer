@@ -61,6 +61,7 @@ export interface RingScenario {
   id: string;
   title: string;
   description: string;
+  watchPoints?: string[];
   baseState: RingState;
   finalState: RingState;
   steps: RingStep[];
