@@ -244,6 +244,7 @@ button {
 .visual-column {
   display: grid;
   gap: 20px;
+  min-width: 0;
 }
 
 .panel {
@@ -253,6 +254,7 @@ button {
   border-radius: 28px;
   padding: 22px;
   box-shadow: var(--shadow);
+  min-width: 0;
 }
 
 .panel-header {
@@ -1888,6 +1890,16 @@ button {
 
 .mobile-playback-dock {
   display: none;
+}
+
+@media (max-width: 1240px) {
+  .workspace {
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+  }
+
+  .panel-inspector {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 1080px) {
