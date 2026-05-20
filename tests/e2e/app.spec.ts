@@ -37,6 +37,13 @@ async function clickNext(page: Page) {
   await clickControl(page, "Next");
 }
 
+async function clickMobileNext(page: Page) {
+  await page
+    .locator(".mobile-playback-dock")
+    .getByRole("button", { name: "Next", exact: true })
+    .click();
+}
+
 async function loadScenario(page: Page, title: string) {
   await controls(page).getByText(title, { exact: true }).click();
 }
@@ -337,6 +344,53 @@ test("keeps mobile panel order and playback dock", async ({ page }) => {
   expect(layout.code?.order).toBe("5");
   expect(layout.visualizer?.top).toBeLessThan(1200);
   expect(layout.dock?.height).toBeLessThanOrEqual(72);
+
+  await page.evaluate(() => window.scrollTo(0, window.innerHeight));
+  await expect(page.locator(".mobile-playback-dock")).toHaveClass(
+    /is-reading-content/,
+  );
+  await expect
+    .poll(async () =>
+      Number(
+        await page
+          .locator(".mobile-playback-dock")
+          .evaluate((element) => window.getComputedStyle(element).opacity),
+      ),
+    )
+    .toBeLessThan(1);
+  await expect
+    .poll(async () =>
+      await page
+        .locator(".mobile-playback-dock")
+        .evaluate((element) => window.getComputedStyle(element).transform),
+    )
+    .not.toBe("none");
+});
+
+test("adds mobile affordance to horizontal visual strips", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await openApp(page);
+  await selectTopic(page, "Buffer Pool");
+  await loadScenario(page, "Sequential scan pressure");
+  await clickMobileNext(page);
+  await clickMobileNext(page);
+
+  const strip = await page.evaluate(() => {
+    const element = document.querySelector(".buffer-frame-grid");
+    const style = element ? window.getComputedStyle(element) : null;
+
+    return {
+      scrollWidth: element?.scrollWidth ?? 0,
+      clientWidth: element?.clientWidth ?? 0,
+      scrollSnapType: style?.scrollSnapType ?? "",
+      maskImage: style?.maskImage ?? "",
+    };
+  });
+
+  expect(strip.scrollWidth).toBeGreaterThan(strip.clientWidth);
+  expect(strip.scrollSnapType).toContain("x");
+  expect(strip.maskImage).not.toBe("none");
+  expect(strip.maskImage).not.toBe("");
 });
 
 test("keeps iPad mini landscape Step Log close to Visualization", async ({ page }) => {
