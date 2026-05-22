@@ -367,6 +367,61 @@ test("keeps mobile panel order and playback dock", async ({ page }) => {
     .not.toBe("none");
 });
 
+test("keeps mobile Step Log compact and expandable", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await openApp(page);
+  await selectTopic(page, "B-tree");
+  await loadScenario(page, "根ノードを分割する");
+
+  const timeline = page.getByLabel("Step timeline");
+  await expect(timeline).toBeVisible();
+  await expect
+    .poll(async () =>
+      await timeline.evaluate((element) => (element as HTMLDetailsElement).open),
+    )
+    .toBe(false);
+  await expect(timeline.locator(".step-timeline-active-title")).toHaveText(
+    "Ready for playback",
+  );
+  await expect(timeline.locator(".step-timeline-next")).toContainText(
+    "First:",
+  );
+  await expect(
+    timeline.getByRole("button", { name: "Step 2: 内部ノードを走査" }),
+  ).toBeHidden();
+
+  const compactLayout = await timeline.evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+
+    return {
+      height: bounds.height,
+      bottom: bounds.bottom + window.scrollY,
+    };
+  });
+
+  expect(compactLayout.height).toBeLessThan(150);
+
+  await timeline.locator("summary").click();
+  await expect
+    .poll(async () =>
+      await timeline.evaluate((element) => (element as HTMLDetailsElement).open),
+    )
+    .toBe(true);
+  await timeline
+    .getByRole("button", { name: "Step 2: 内部ノードを走査" })
+    .click();
+
+  await expect(inspectorHeading(page)).toHaveText("内部ノードを走査");
+  await expect(timeline.locator(".step-timeline-active-title")).toHaveText(
+    "内部ノードを走査",
+  );
+  await expect
+    .poll(async () =>
+      await timeline.evaluate((element) => (element as HTMLDetailsElement).open),
+    )
+    .toBe(false);
+});
+
 test("adds mobile affordance to horizontal visual strips", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await openApp(page);
