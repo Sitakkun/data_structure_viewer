@@ -11,21 +11,46 @@ interface StepTimelineProps {
   onSelectStep: (index: number) => void;
 }
 
+const compactTimelineMediaQuery = "(max-width: 720px)";
+
+function isCompactTimelineViewport() {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia(compactTimelineMediaQuery).matches
+  );
+}
+
 export function StepTimeline({
   steps,
   currentStepIndex,
   onSelectStep,
 }: StepTimelineProps) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(() => {
+    return !isCompactTimelineViewport();
+  });
 
   if (steps.length === 0) {
     return null;
   }
 
   const activeStep = currentStepIndex >= 0 ? steps[currentStepIndex] : undefined;
+  const upcomingStep =
+    currentStepIndex >= 0 ? steps[currentStepIndex + 1] : steps[0];
   const currentLabel = activeStep
     ? `Step ${currentStepIndex + 1} / ${steps.length}`
     : `Before playback / ${steps.length} steps`;
+  const railTitle = activeStep?.title ?? "Ready for playback";
+  const upcomingLabel = upcomingStep
+    ? `${activeStep ? "Next" : "First"}: ${upcomingStep.title}`
+    : "Final milestone";
+
+  function handleSelectStep(index: number) {
+    onSelectStep(index);
+
+    if (isCompactTimelineViewport()) {
+      setIsOpen(false);
+    }
+  }
 
   return (
     <details
@@ -35,9 +60,11 @@ export function StepTimeline({
       onToggle={(event) => setIsOpen(event.currentTarget.open)}
     >
       <summary className="step-timeline-summary">
-        <span>
+        <span className="step-timeline-summary-main">
           <span className="eyebrow">Timeline</span>
-          <strong>Named milestones</strong>
+          <strong className="step-timeline-heading">Named milestones</strong>
+          <span className="step-timeline-active-title">{railTitle}</span>
+          <span className="step-timeline-next">{upcomingLabel}</span>
         </span>
         <span className="step-timeline-current">{currentLabel}</span>
       </summary>
@@ -57,7 +84,7 @@ export function StepTimeline({
                 }
                 aria-current={isActive ? "step" : undefined}
                 aria-label={`Step ${index + 1}: ${step.title}`}
-                onClick={() => onSelectStep(index)}
+                onClick={() => handleSelectStep(index)}
               >
                 <span className="step-timeline-index">
                   {String(index + 1).padStart(2, "0")}
