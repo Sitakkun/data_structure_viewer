@@ -7,10 +7,14 @@ async function openApp(page: Page) {
 }
 
 async function selectTopic(page: Page, topic: string) {
-  await page
-    .getByRole("navigation", { name: "Study pages" })
-    .getByRole("button", { name: topic, exact: true })
-    .click();
+  const studyNav = page.getByRole("navigation", { name: "Study pages" });
+  const topicButton = studyNav.getByRole("button", { name: topic, exact: true });
+
+  if (!(await topicButton.isVisible())) {
+    await studyNav.getByRole("button", { name: /Change topic/ }).click();
+  }
+
+  await topicButton.click();
 }
 
 function controls(page: Page) {
@@ -365,6 +369,37 @@ test("keeps mobile panel order and playback dock", async ({ page }) => {
         .evaluate((element) => window.getComputedStyle(element).transform),
     )
     .not.toBe("none");
+});
+
+test("keeps mobile topic navigation compact and selectable", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await openApp(page);
+
+  const studyNav = page.getByRole("navigation", { name: "Study pages" });
+  const topicToggle = studyNav.getByRole("button", { name: /Change topic/ });
+  const chordButton = studyNav.getByRole("button", {
+    name: "Chord",
+    exact: true,
+  });
+
+  await expect(topicToggle).toBeVisible();
+  await expect(topicToggle).toContainText("Hash Table Collision");
+  await expect(chordButton).toBeHidden();
+
+  const compactHeight = await studyNav.evaluate(
+    (element) => element.getBoundingClientRect().height,
+  );
+  expect(compactHeight).toBeLessThan(86);
+
+  await topicToggle.click();
+  await expect(chordButton).toBeVisible();
+  await chordButton.click();
+
+  await expect(
+    page.getByRole("heading", { name: "Chord Finger Table", level: 1 }),
+  ).toBeVisible();
+  await expect(topicToggle).toContainText("Chord");
+  await expect(chordButton).toBeHidden();
 });
 
 test("keeps mobile Step Log compact and expandable", async ({ page }) => {
