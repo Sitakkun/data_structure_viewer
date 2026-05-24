@@ -168,6 +168,73 @@ function scrollToPanel(selector: string) {
   });
 }
 
+function LearningMap({
+  selectedPage,
+  onSelectPage,
+}: {
+  selectedPage: StudyPage;
+  onSelectPage: (pageId: StudyPage) => void;
+}) {
+  return (
+    <div className="roadmap-grid">
+      {studyPages.map((page, index) => (
+        <button
+          key={page.id}
+          type="button"
+          className={
+            selectedPage === page.id ? "roadmap-card is-selected" : "roadmap-card"
+          }
+          onClick={() => onSelectPage(page.id)}
+        >
+          <span>
+            {String(index + 1).padStart(2, "0")} / {page.track}
+          </span>
+          <strong>{page.title}</strong>
+          <small>{page.description}</small>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function Glossary() {
+  return (
+    <div className="glossary-grid">
+      {glossaryTerms.map((term) => (
+        <div key={term.term} className="glossary-card">
+          <strong>{term.term}</strong>
+          <span>{term.description}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function StudyNote({
+  inputId,
+  value,
+  onChange,
+}: {
+  inputId: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <>
+      <label className="field-label" htmlFor={inputId}>
+        This note is saved locally per topic.
+      </label>
+      <textarea
+        id={inputId}
+        className="study-note-input"
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder="気づいたこと、あとで調べたいこと、比較したい点をメモ..."
+      />
+    </>
+  );
+}
+
 export default function App() {
   const [selectedPage, setSelectedPage] =
     useState<StudyPage>("hash-table-collision");
@@ -250,52 +317,62 @@ export default function App() {
       <section className="learning-support">
         <details className="support-details">
           <summary>Learning map</summary>
-          <div className="roadmap-grid">
-            {studyPages.map((page, index) => (
-              <button
-                key={page.id}
-                type="button"
-                className={
-                  selectedPage === page.id
-                    ? "roadmap-card is-selected"
-                    : "roadmap-card"
-                }
-                onClick={() => handleSelectPage(page.id)}
-              >
-                <span>{String(index + 1).padStart(2, "0")} / {page.track}</span>
-                <strong>{page.title}</strong>
-                <small>{page.description}</small>
-              </button>
-            ))}
-          </div>
+          <LearningMap
+            selectedPage={selectedPage}
+            onSelectPage={handleSelectPage}
+          />
         </details>
 
         <details className="support-details">
           <summary>Glossary</summary>
-          <div className="glossary-grid">
-            {glossaryTerms.map((term) => (
-              <div key={term.term} className="glossary-card">
-                <strong>{term.term}</strong>
-                <span>{term.description}</span>
-              </div>
-            ))}
-          </div>
+          <Glossary />
         </details>
 
         <details className="support-details support-notes">
           <summary>Study note</summary>
-          <label className="field-label" htmlFor="study-note-input">
-            This note is saved locally per topic.
-          </label>
-          <textarea
-            id="study-note-input"
-            className="study-note-input"
+          <StudyNote
+            inputId="study-note-input"
             value={studyNote}
-            onChange={(event) => setStudyNote(event.target.value)}
-            placeholder="気づいたこと、あとで調べたいこと、比較したい点をメモ..."
+            onChange={setStudyNote}
           />
         </details>
       </section>
+
+      <details className="mobile-study-tools">
+        <summary className="mobile-study-tools-summary">
+          <span className="mobile-study-tools-copy">
+            <span className="mobile-study-tools-kicker">Study tools</span>
+            <strong>Map / Glossary / Note</strong>
+          </span>
+          <span className="mobile-study-tools-status" aria-hidden="true">
+            <span className="mobile-study-tools-open">Open</span>
+            <span className="mobile-study-tools-close">Close</span>
+          </span>
+        </summary>
+        <div className="mobile-study-tools-panels">
+          <details className="support-details">
+            <summary>Learning map</summary>
+            <LearningMap
+              selectedPage={selectedPage}
+              onSelectPage={handleSelectPage}
+            />
+          </details>
+
+          <details className="support-details">
+            <summary>Glossary</summary>
+            <Glossary />
+          </details>
+
+          <details className="support-details support-notes">
+            <summary>Study note</summary>
+            <StudyNote
+              inputId="study-note-input-mobile"
+              value={studyNote}
+              onChange={setStudyNote}
+            />
+          </details>
+        </div>
+      </details>
 
       {selectedPage === "b-plus-tree" ? <BPlusTreePage /> : null}
       {selectedPage === "b-epsilon-tree" ? <BEpsilonTreePage /> : null}

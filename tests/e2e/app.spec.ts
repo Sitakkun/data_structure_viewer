@@ -402,6 +402,56 @@ test("keeps mobile topic navigation compact and selectable", async ({ page }) =>
   await expect(chordButton).toBeHidden();
 });
 
+test("compresses mobile first viewport behind study tools", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await openApp(page);
+
+  const tools = page.locator(".mobile-study-tools");
+  const panels = tools.locator(".mobile-study-tools-panels");
+
+  await expect(tools).toBeVisible();
+  await expect(page.locator(".learning-support")).toBeHidden();
+  await expect(panels).toBeHidden();
+
+  const compactLayout = await page.evaluate(() => {
+    const rect = (selector: string) => {
+      const element = document.querySelector(selector);
+      const bounds = element?.getBoundingClientRect();
+
+      return bounds
+        ? {
+            top: bounds.top,
+            bottom: bounds.bottom,
+            height: bounds.height,
+          }
+        : null;
+    };
+
+    return {
+      topic: rect(".top-nav"),
+      jumps: rect(".section-jump-nav"),
+      tools: rect(".mobile-study-tools"),
+      hero: rect(".hero"),
+      controls: rect(".panel-controls"),
+      viewportHeight: window.innerHeight,
+    };
+  });
+
+  expect(compactLayout.topic?.height).toBeLessThan(72);
+  expect(compactLayout.jumps?.height).toBeLessThan(46);
+  expect(compactLayout.tools?.height).toBeLessThan(50);
+  expect(compactLayout.hero?.height).toBeLessThan(140);
+  expect(compactLayout.controls?.top).toBeLessThan(
+    compactLayout.viewportHeight - 120,
+  );
+
+  await tools.locator(".mobile-study-tools-summary").click();
+  await expect(panels).toBeVisible();
+  await expect(panels.getByText("Learning map", { exact: true })).toBeVisible();
+  await expect(panels.getByText("Glossary", { exact: true })).toBeVisible();
+  await expect(panels.getByText("Study note", { exact: true })).toBeVisible();
+});
+
 test("keeps mobile Step Log compact and expandable", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await openApp(page);

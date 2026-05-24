@@ -97,6 +97,10 @@ button {
   margin-bottom: 22px;
 }
 
+.mobile-study-tools {
+  display: none;
+}
+
 .support-details {
   border-radius: 22px;
   border: 1px solid var(--panel-border);
@@ -214,7 +218,7 @@ button {
   font-family: "Fraunces", "Times New Roman", serif;
   font-size: clamp(1.8rem, 2vw + 1rem, 3.3rem);
   font-weight: 600;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
 }
 
 .hero-copy {
@@ -2095,8 +2099,8 @@ button {
 
   .top-nav {
     display: grid;
-    gap: 8px;
-    margin: 0 -14px 18px;
+    gap: 6px;
+    margin: 0 -14px 10px;
     padding: 0 14px;
   }
 
@@ -2105,9 +2109,9 @@ button {
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     gap: 4px 10px;
-    min-height: 58px;
-    padding: 10px 12px;
-    border-radius: 18px;
+    min-height: 52px;
+    padding: 8px 11px;
+    border-radius: 16px;
     border: 1px solid rgba(23, 32, 51, 0.09);
     background: rgba(255, 252, 247, 0.9);
     box-shadow: 0 14px 34px rgba(58, 43, 18, 0.1);
@@ -2126,14 +2130,14 @@ button {
   .topic-switcher-kicker {
     grid-column: 1 / -1;
     color: var(--teal);
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 900;
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
   .topic-switcher-action {
-    padding: 6px 8px;
+    padding: 5px 8px;
     border-radius: 999px;
     background: rgba(36, 107, 100, 0.09);
     color: var(--ink-soft);
@@ -2176,10 +2180,10 @@ button {
     z-index: 30;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 6px;
-    margin: 0 0 14px;
-    padding: 7px;
-    border-radius: 18px;
+    gap: 4px;
+    margin: 0 0 8px;
+    padding: 5px;
+    border-radius: 15px;
     background: rgba(255, 252, 247, 0.9);
     border: 1px solid rgba(23, 32, 51, 0.08);
     box-shadow: 0 14px 34px rgba(58, 43, 18, 0.1);
@@ -2187,24 +2191,96 @@ button {
   }
 
   .section-jump-nav button {
-    min-height: 36px;
-    padding: 7px 6px;
-    border-radius: 13px;
+    min-height: 31px;
+    padding: 5px 5px;
+    border-radius: 11px;
     border: 1px solid rgba(23, 32, 51, 0.07);
     background: rgba(255, 255, 255, 0.74);
     color: #172033;
-    font-size: 0.76rem;
+    font-size: 0.72rem;
     font-weight: 800;
   }
 
   .learning-support {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    display: none;
+  }
+
+  .mobile-study-tools {
+    display: block;
+    margin-bottom: 8px;
+    border-radius: 16px;
+    border: 1px solid rgba(23, 32, 51, 0.08);
+    background: rgba(255, 252, 247, 0.88);
+    box-shadow: 0 12px 28px rgba(58, 43, 18, 0.08);
+    overflow: hidden;
+  }
+
+  .mobile-study-tools-summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    min-height: 42px;
+    padding: 8px 11px;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .mobile-study-tools-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .mobile-study-tools-copy {
+    display: grid;
+    min-width: 0;
+    gap: 1px;
+  }
+
+  .mobile-study-tools-kicker {
+    color: var(--teal);
+    font-size: 0.66rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .mobile-study-tools-copy strong {
+    overflow: hidden;
+    color: #172033;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mobile-study-tools-status {
+    padding: 5px 8px;
+    border-radius: 999px;
+    background: rgba(36, 107, 100, 0.09);
+    color: var(--ink-soft);
+    font-size: 0.7rem;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  .mobile-study-tools-close,
+  .mobile-study-tools[open] .mobile-study-tools-open {
+    display: none;
+  }
+
+  .mobile-study-tools[open] .mobile-study-tools-close {
+    display: inline;
+  }
+
+  .mobile-study-tools-panels {
+    display: grid;
     gap: 8px;
-    margin-bottom: 12px;
+    padding: 0 8px 8px;
   }
 
   .support-details {
-    border-radius: 18px;
+    border-radius: 16px;
   }
 
   .support-details[open] {
@@ -2212,7 +2288,7 @@ button {
   }
 
   .support-details summary {
-    padding: 11px 9px;
+    padding: 10px 11px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -2229,19 +2305,23 @@ button {
   }
 
   .hero {
-    gap: 10px;
-    margin-bottom: 12px;
+    gap: 6px;
+    margin-bottom: 10px;
   }
 
   .hero h1,
   .panel h2 {
-    font-size: clamp(1.45rem, 7vw, 2.05rem);
+    font-size: 1.72rem;
     line-height: 1.12;
   }
 
   .hero-copy {
-    margin-top: 8px;
+    display: -webkit-box;
+    margin-top: 6px;
+    overflow: hidden;
     font-size: 0.9rem;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
 
   .hero-meta {
