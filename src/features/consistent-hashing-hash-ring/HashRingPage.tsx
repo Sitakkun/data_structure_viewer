@@ -269,6 +269,7 @@ export function HashRingPage() {
       </div>
       <MobilePlaybackDock
         currentStepIndex={currentStepIndex}
+        currentStepTitle={activeStep?.title}
         totalSteps={steps.length}
         isPlaying={isPlaying}
         onPlayPause={handlePlayPause}

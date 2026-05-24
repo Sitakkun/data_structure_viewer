@@ -259,6 +259,7 @@ export function BEpsilonTreePage() {
       </div>
       <MobilePlaybackDock
         currentStepIndex={currentStepIndex}
+        currentStepTitle={activeStep?.title}
         totalSteps={steps.length}
         isPlaying={isPlaying}
         onPlayPause={handlePlayPause}
