@@ -289,6 +289,7 @@ export function BTreePage() {
       </div>
       <MobilePlaybackDock
         currentStepIndex={currentStepIndex}
+        currentStepTitle={activeStep?.title}
         totalSteps={steps.length}
         isPlaying={isPlaying}
         onPlayPause={handlePlayPause}

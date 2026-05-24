@@ -371,6 +371,72 @@ test("keeps mobile panel order and playback dock", async ({ page }) => {
     .not.toBe("none");
 });
 
+test("switches mobile layout into playback mode after stepping", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await openApp(page);
+  await selectTopic(page, "Hash Table Collision");
+  await loadScenario(page, "衝突なしの挿入");
+
+  const playbackDock = page.locator(".mobile-playback-dock");
+  await expect(page.locator("body")).not.toHaveClass(/mobile-playback-active/);
+  await expect(playbackDock).toContainText("Ready /");
+  await expect(playbackDock).toContainText("Ready for playback");
+
+  await clickMobileNext(page);
+
+  await expect(page.locator("body")).toHaveClass(/mobile-playback-active/);
+  await expect(playbackDock).toContainText("Step 1 /");
+  await expect(playbackDock).toContainText("ハッシュ値を計算");
+
+  const playbackLayout = await page.evaluate(() => {
+    const rect = (selector: string) => {
+      const element = document.querySelector(selector);
+      const bounds = element?.getBoundingClientRect();
+
+      return bounds
+        ? {
+            top: bounds.top + window.scrollY,
+            order: window.getComputedStyle(element).order,
+          }
+        : null;
+    };
+
+    return {
+      controls: rect(".panel-controls"),
+      visualizer: rect(".panel-visualizer"),
+      inspector: rect(".panel-inspector"),
+      timeline: rect(".panel-timeline"),
+    };
+  });
+
+  expect(playbackLayout.visualizer?.order).toBe("1");
+  expect(playbackLayout.inspector?.order).toBe("2");
+  expect(playbackLayout.timeline?.order).toBe("3");
+  expect(playbackLayout.controls?.order).toBe("4");
+  expect(playbackLayout.visualizer?.top).toBeLessThan(
+    playbackLayout.controls?.top ?? Number.POSITIVE_INFINITY,
+  );
+
+  await playbackDock.getByRole("button", { name: "Reset", exact: true }).click();
+  await expect(page.locator("body")).not.toHaveClass(/mobile-playback-active/);
+
+  const resetLayout = await page.evaluate(() => {
+    const controls = document
+      .querySelector(".panel-controls")
+      ?.getBoundingClientRect();
+
+    return {
+      controlsTop: controls?.top ?? 0,
+      controlsOrder: window.getComputedStyle(
+        document.querySelector(".panel-controls") as Element,
+      ).order,
+    };
+  });
+
+  expect(resetLayout.controlsOrder).toBe("1");
+  expect(resetLayout.controlsTop).toBeGreaterThan(0);
+});
+
 test("keeps mobile topic navigation compact and selectable", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await openApp(page);
