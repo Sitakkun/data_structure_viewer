@@ -172,6 +172,16 @@ export default function App() {
   const [selectedPage, setSelectedPage] =
     useState<StudyPage>("hash-table-collision");
   const [studyNote, setStudyNote] = useState("");
+  const [isTopicMenuOpen, setIsTopicMenuOpen] = useState(false);
+  const selectedPageIndex = studyPages.findIndex(
+    (page) => page.id === selectedPage,
+  );
+  const selectedPageMeta = studyPages[selectedPageIndex] ?? studyPages[0];
+
+  function handleSelectPage(pageId: StudyPage) {
+    setSelectedPage(pageId);
+    setIsTopicMenuOpen(false);
+  }
 
   useEffect(() => {
     setStudyNote(localStorage.getItem(`data-structure-note:${selectedPage}`) ?? "");
@@ -183,21 +193,43 @@ export default function App() {
 
   return (
     <main className="app-shell">
-      <nav className="top-nav" aria-label="Study pages">
-        {studyPages.map((page) => (
-          <button
-            key={page.id}
-            type="button"
-            className={
-              selectedPage === page.id
-                ? "top-nav-button is-selected"
-                : "top-nav-button"
-            }
-            onClick={() => setSelectedPage(page.id)}
-          >
-            {page.title}
-          </button>
-        ))}
+      <nav
+        className={isTopicMenuOpen ? "top-nav is-topic-menu-open" : "top-nav"}
+        aria-label="Study pages"
+      >
+        <button
+          type="button"
+          className="topic-switcher-toggle"
+          aria-expanded={isTopicMenuOpen}
+          aria-controls="study-topic-list"
+          onClick={() => setIsTopicMenuOpen((current) => !current)}
+        >
+          <span className="topic-switcher-kicker">
+            Topic {String(selectedPageIndex + 1).padStart(2, "0")} /{" "}
+            {selectedPageMeta.track}
+          </span>
+          <strong>{selectedPageMeta.title}</strong>
+          <span className="topic-switcher-action">
+            {isTopicMenuOpen ? "Close topics" : "Change topic"}
+          </span>
+        </button>
+        <div id="study-topic-list" className="top-nav-list">
+          {studyPages.map((page) => (
+            <button
+              key={page.id}
+              type="button"
+              className={
+                selectedPage === page.id
+                  ? "top-nav-button is-selected"
+                  : "top-nav-button"
+              }
+              aria-current={selectedPage === page.id ? "page" : undefined}
+              onClick={() => handleSelectPage(page.id)}
+            >
+              {page.title}
+            </button>
+          ))}
+        </div>
       </nav>
 
       <nav className="section-jump-nav" aria-label="Page sections">
@@ -228,7 +260,7 @@ export default function App() {
                     ? "roadmap-card is-selected"
                     : "roadmap-card"
                 }
-                onClick={() => setSelectedPage(page.id)}
+                onClick={() => handleSelectPage(page.id)}
               >
                 <span>{String(index + 1).padStart(2, "0")} / {page.track}</span>
                 <strong>{page.title}</strong>
