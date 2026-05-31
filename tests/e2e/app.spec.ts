@@ -93,6 +93,42 @@ test("navigates all study pages", async ({ page }) => {
   }
 });
 
+test("groups topic navigation by learning track", async ({ page }) => {
+  await openApp(page);
+
+  const groups = await page.evaluate(() =>
+    Array.from(document.querySelectorAll(".topic-track-group")).map((group) => ({
+      track: group.querySelector(".topic-track-label span")?.textContent,
+      topics: Array.from(group.querySelectorAll(".top-nav-button")).map(
+        (button) => button.textContent?.trim(),
+      ),
+      isCurrent: group.classList.contains("is-current"),
+    })),
+  );
+
+  expect(groups.find((group) => group.track === "Trees")?.topics).toEqual([
+    "B-tree",
+    "B+ Tree",
+  ]);
+  expect(
+    groups.find((group) => group.track === "Write Optimization")?.topics,
+  ).toEqual(["Bε Tree", "LSM-tree"]);
+  expect(
+    groups.find((group) => group.track === "Distributed Hashing")?.topics,
+  ).toEqual(["Consistent Hashing", "Chord"]);
+  expect(groups.find((group) => group.isCurrent)?.track).toBe("Hashing");
+
+  await selectTopic(page, "B-tree");
+
+  const currentTrack = await page.evaluate(
+    () =>
+      document
+        .querySelector(".topic-track-group.is-current .topic-track-label span")
+        ?.textContent,
+  );
+  expect(currentTrack).toBe("Trees");
+});
+
 test("shows guided what-to-watch prompts before playback", async ({ page }) => {
   await openApp(page);
 
@@ -499,6 +535,7 @@ test("keeps mobile topic navigation compact and selectable", async ({ page }) =>
   expect(compactHeight).toBeLessThan(86);
 
   await topicToggle.click();
+  await expect(studyNav.getByText("Distributed Hashing")).toBeVisible();
   await expect(chordButton).toBeVisible();
   await chordButton.click();
 

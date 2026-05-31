@@ -24,12 +24,14 @@ type StudyPage =
   | "consistent-hashing"
   | "consistent-hashing-chord";
 
-const studyPages: Array<{
+type StudyPageMeta = {
   id: StudyPage;
   title: string;
   track: string;
   description: string;
-}> = [
+};
+
+const studyPages: StudyPageMeta[] = [
   {
     id: "hash-table-collision",
     title: "Hash Table Collision",
@@ -97,6 +99,24 @@ const studyPages: Array<{
     description: "finger table と lookup path を確認します。",
   },
 ];
+
+const studyPageGroups = studyPages.reduce<
+  Array<{ track: string; pages: StudyPageMeta[] }>
+>((groups, page) => {
+  const group = groups.find((currentGroup) => currentGroup.track === page.track);
+
+  if (group) {
+    group.pages.push(page);
+  } else {
+    groups.push({ track: page.track, pages: [page] });
+  }
+
+  return groups;
+}, []);
+
+function trackLabelId(track: string) {
+  return `topic-track-${track.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+}
 
 const glossaryTerms = [
   {
@@ -281,20 +301,38 @@ export default function App() {
           </span>
         </button>
         <div id="study-topic-list" className="top-nav-list">
-          {studyPages.map((page) => (
-            <button
-              key={page.id}
-              type="button"
+          {studyPageGroups.map((group) => (
+            <section
+              key={group.track}
               className={
-                selectedPage === page.id
-                  ? "top-nav-button is-selected"
-                  : "top-nav-button"
+                group.pages.some((page) => page.id === selectedPage)
+                  ? "topic-track-group is-current"
+                  : "topic-track-group"
               }
-              aria-current={selectedPage === page.id ? "page" : undefined}
-              onClick={() => handleSelectPage(page.id)}
+              aria-labelledby={trackLabelId(group.track)}
             >
-              {page.title}
-            </button>
+              <p id={trackLabelId(group.track)} className="topic-track-label">
+                <span>{group.track}</span>
+                <small>{group.pages.length}</small>
+              </p>
+              <div className="topic-track-items">
+                {group.pages.map((page) => (
+                  <button
+                    key={page.id}
+                    type="button"
+                    className={
+                      selectedPage === page.id
+                        ? "top-nav-button is-selected"
+                        : "top-nav-button"
+                    }
+                    aria-current={selectedPage === page.id ? "page" : undefined}
+                    onClick={() => handleSelectPage(page.id)}
+                  >
+                    {page.title}
+                  </button>
+                ))}
+              </div>
+            </section>
           ))}
         </div>
       </nav>
