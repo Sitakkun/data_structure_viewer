@@ -44,6 +44,8 @@ export function BTreePage() {
   const [keyInput, setKeyInput] = useState("35");
   const [rangeStartInput, setRangeStartInput] = useState("15");
   const [rangeEndInput, setRangeEndInput] = useState("45");
+  const [keyInputError, setKeyInputError] = useState<string>();
+  const [rangeInputError, setRangeInputError] = useState<string>();
   const [selectedScenarioId, setSelectedScenarioId] = useState(seededBTreeScenario.id);
   const [scenarioTitle, setScenarioTitle] = useState(seededBTreeScenario.title);
   const [scenarioDescription, setScenarioDescription] = useState(
@@ -94,6 +96,8 @@ export function BTreePage() {
   function loadScenario(scenarioId: string) {
     const scenario = findScenarioById(scenarioId);
 
+    setKeyInputError(undefined);
+    setRangeInputError(undefined);
     setIsPlaying(false);
     setSelectedScenarioId(scenario.id);
     setScenarioTitle(scenario.title);
@@ -113,6 +117,8 @@ export function BTreePage() {
   function commitSteps(nextSteps: BTreeStep[], operationLabel: string) {
     const finalState = nextSteps[nextSteps.length - 1]?.btreeState ?? committedState;
 
+    setKeyInputError(undefined);
+    setRangeInputError(undefined);
     setIsPlaying(false);
     setSelectedScenarioId(`btree-manual-${operationLabel}`);
     setScenarioTitle(operationLabel);
@@ -134,41 +140,50 @@ export function BTreePage() {
   function handleInsert() {
     const key = Number(keyInput);
     if (!Number.isInteger(key)) {
+      setKeyInputError("Key must be an integer.");
       return;
     }
 
+    setKeyInputError(undefined);
     commitSteps(buildInsertSteps(committedState, key), `INSERT ${key}`);
   }
 
   function handleSearch() {
     const key = Number(keyInput);
     if (!Number.isInteger(key)) {
+      setKeyInputError("Key must be an integer.");
       return;
     }
 
+    setKeyInputError(undefined);
     commitSteps(buildSearchSteps(committedState, key), `SEARCH ${key}`);
   }
 
   function handleDelete() {
     const key = Number(keyInput);
     if (!Number.isInteger(key)) {
+      setKeyInputError("Key must be an integer.");
       return;
     }
 
+    setKeyInputError(undefined);
     commitSteps(buildDeleteSteps(committedState, key), `DELETE ${key}`);
   }
 
   function handleRangeScan() {
     const startKey = Number(rangeStartInput);
     const endKey = Number(rangeEndInput);
-    if (
-      !Number.isInteger(startKey) ||
-      !Number.isInteger(endKey) ||
-      startKey > endKey
-    ) {
+    if (!Number.isInteger(startKey) || !Number.isInteger(endKey)) {
+      setRangeInputError("Start and End must be integers.");
       return;
     }
 
+    if (startKey > endKey) {
+      setRangeInputError("Start must be less than or equal to End.");
+      return;
+    }
+
+    setRangeInputError(undefined);
     commitSteps(
       buildRangeScanSteps(committedState, startKey, endKey),
       `RANGE ${startKey}..${endKey}`,
@@ -236,11 +251,22 @@ export function BTreePage() {
       <div className="workspace">
         <BTreeControlPanel
           keyInput={keyInput}
-          onKeyInputChange={setKeyInput}
+          keyInputError={keyInputError}
+          onKeyInputChange={(value) => {
+            setKeyInput(value);
+            setKeyInputError(undefined);
+          }}
           rangeStartInput={rangeStartInput}
           rangeEndInput={rangeEndInput}
-          onRangeStartInputChange={setRangeStartInput}
-          onRangeEndInputChange={setRangeEndInput}
+          rangeInputError={rangeInputError}
+          onRangeStartInputChange={(value) => {
+            setRangeStartInput(value);
+            setRangeInputError(undefined);
+          }}
+          onRangeEndInputChange={(value) => {
+            setRangeEndInput(value);
+            setRangeInputError(undefined);
+          }}
           onInsert={handleInsert}
           onSearch={handleSearch}
           onDelete={handleDelete}

@@ -50,6 +50,8 @@ export function BufferPoolPage() {
   const [pageInput, setPageInput] = useState("7");
   const [rangeStartInput, setRangeStartInput] = useState("10");
   const [rangeEndInput, setRangeEndInput] = useState("13");
+  const [pageInputError, setPageInputError] = useState<string>();
+  const [rangeInputError, setRangeInputError] = useState<string>();
   const [selectedScenarioId, setSelectedScenarioId] = useState(initialScenario.id);
   const [scenarioTitle, setScenarioTitle] = useState(initialScenario.title);
   const [scenarioDescription, setScenarioDescription] = useState(
@@ -87,6 +89,8 @@ export function BufferPoolPage() {
   function applyScenario(scenarioId: string, policy = selectedPolicy) {
     const scenario = findBufferPoolScenarioById(scenarioId, policy);
 
+    setPageInputError(undefined);
+    setRangeInputError(undefined);
     setIsPlaying(false);
     setSelectedScenarioId(scenario.id);
     setScenarioTitle(scenario.title);
@@ -106,6 +110,8 @@ export function BufferPoolPage() {
   function commitSteps(nextSteps: BufferPoolStep[], operationLabel: string) {
     const finalState = nextSteps[nextSteps.length - 1]?.bufferState ?? committedState;
 
+    setPageInputError(undefined);
+    setRangeInputError(undefined);
     setIsPlaying(false);
     setSelectedScenarioId(`buffer-manual-${operationLabel}`);
     setScenarioTitle(operationLabel);
@@ -127,9 +133,11 @@ export function BufferPoolPage() {
   function handleSinglePageOperation(operation: Exclude<BufferPoolOperation, "range-scan" | "checkpoint">) {
     const pageId = parsePageId(pageInput);
     if (pageId === undefined) {
+      setPageInputError("Page ID must be a positive integer.");
       return;
     }
 
+    setPageInputError(undefined);
     const base = withPolicy(committedState, selectedPolicy);
     const nextSteps = buildBufferPoolSteps(base, [{ operation, pageId }]);
     commitSteps(nextSteps, `${operation.toUpperCase()} P${pageId}`);
@@ -139,11 +147,18 @@ export function BufferPoolPage() {
     const start = parsePageId(rangeStartInput);
     const end = parsePageId(rangeEndInput);
     if (start === undefined || end === undefined) {
+      setRangeInputError("Range start and end must be positive integers.");
       return;
     }
 
-    const min = Math.min(start, end);
-    const max = Math.max(start, end);
+    if (start > end) {
+      setRangeInputError("Range start must be less than or equal to Range end.");
+      return;
+    }
+
+    setRangeInputError(undefined);
+    const min = start;
+    const max = end;
     const cappedMax = Math.min(max, min + 11);
     const actions = Array.from(
       { length: cappedMax - min + 1 },
@@ -228,11 +243,22 @@ export function BufferPoolPage() {
           selectedPolicy={selectedPolicy}
           onPolicyChange={handlePolicyChange}
           pageInput={pageInput}
-          onPageInputChange={setPageInput}
+          pageInputError={pageInputError}
+          onPageInputChange={(value) => {
+            setPageInput(value);
+            setPageInputError(undefined);
+          }}
           rangeStartInput={rangeStartInput}
-          onRangeStartInputChange={setRangeStartInput}
+          rangeInputError={rangeInputError}
+          onRangeStartInputChange={(value) => {
+            setRangeStartInput(value);
+            setRangeInputError(undefined);
+          }}
           rangeEndInput={rangeEndInput}
-          onRangeEndInputChange={setRangeEndInput}
+          onRangeEndInputChange={(value) => {
+            setRangeEndInput(value);
+            setRangeInputError(undefined);
+          }}
           onRead={() => handleSinglePageOperation("read")}
           onUpdate={() => handleSinglePageOperation("update")}
           onPin={() => handleSinglePageOperation("pin")}

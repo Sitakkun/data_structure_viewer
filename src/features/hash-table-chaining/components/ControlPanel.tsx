@@ -4,6 +4,7 @@ interface ControlPanelProps {
   selectedStrategy: HashStrategy;
   onStrategyChange: (strategy: HashStrategy) => void;
   keyInput: string;
+  keyInputError?: string;
   onKeyInputChange: (value: string) => void;
   onInsert: () => void;
   onSearch: () => void;
@@ -32,6 +33,7 @@ export function ControlPanel({
   selectedStrategy,
   onStrategyChange,
   keyInput,
+  keyInputError,
   onKeyInputChange,
   onInsert,
   onSearch,
@@ -140,9 +142,16 @@ export function ControlPanel({
           className="text-input"
           type="number"
           value={keyInput}
+          aria-invalid={keyInputError ? true : undefined}
+          aria-describedby={keyInputError ? "key-input-error" : undefined}
           onChange={(event) => onKeyInputChange(event.target.value)}
           placeholder="例: 17"
         />
+        {keyInputError ? (
+          <p id="key-input-error" className="field-error">
+            {keyInputError}
+          </p>
+        ) : null}
 
         <div className="button-row">
           <button type="button" className="accent-button" onClick={onInsert}>

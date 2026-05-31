@@ -2,9 +2,11 @@ import { BPlusTreeScenario } from "../types";
 
 interface BPlusTreeControlPanelProps {
   keyInput: string;
+  keyInputError?: string;
   onKeyInputChange: (value: string) => void;
   rangeStartInput: string;
   rangeEndInput: string;
+  rangeInputError?: string;
   onRangeStartInputChange: (value: string) => void;
   onRangeEndInputChange: (value: string) => void;
   onInsert: () => void;
@@ -33,9 +35,11 @@ const speedOptions = [
 
 export function BPlusTreeControlPanel({
   keyInput,
+  keyInputError,
   onKeyInputChange,
   rangeStartInput,
   rangeEndInput,
+  rangeInputError,
   onRangeStartInputChange,
   onRangeEndInputChange,
   onInsert,
@@ -113,9 +117,18 @@ export function BPlusTreeControlPanel({
           className="text-input"
           type="number"
           value={keyInput}
+          aria-invalid={keyInputError ? true : undefined}
+          aria-describedby={
+            keyInputError ? "bplustree-key-input-error" : undefined
+          }
           onChange={(event) => onKeyInputChange(event.target.value)}
           placeholder="例: 35"
         />
+        {keyInputError ? (
+          <p id="bplustree-key-input-error" className="field-error">
+            {keyInputError}
+          </p>
+        ) : null}
         <div className="button-row">
           <button type="button" className="accent-button" onClick={onInsert}>
             Insert
@@ -141,6 +154,10 @@ export function BPlusTreeControlPanel({
               className="text-input"
               type="number"
               value={rangeStartInput}
+              aria-invalid={rangeInputError ? true : undefined}
+              aria-describedby={
+                rangeInputError ? "bplustree-range-input-error" : undefined
+              }
               onChange={(event) => onRangeStartInputChange(event.target.value)}
               placeholder="例: 15"
             />
@@ -152,11 +169,20 @@ export function BPlusTreeControlPanel({
               className="text-input"
               type="number"
               value={rangeEndInput}
+              aria-invalid={rangeInputError ? true : undefined}
+              aria-describedby={
+                rangeInputError ? "bplustree-range-input-error" : undefined
+              }
               onChange={(event) => onRangeEndInputChange(event.target.value)}
               placeholder="例: 45"
             />
           </label>
         </div>
+        {rangeInputError ? (
+          <p id="bplustree-range-input-error" className="field-error">
+            {rangeInputError}
+          </p>
+        ) : null}
         <button
           type="button"
           className="accent-button single-action"

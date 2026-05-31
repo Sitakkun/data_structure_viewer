@@ -2,6 +2,7 @@ import { BloomScenario } from "../types";
 
 interface BloomFilterControlPanelProps {
   itemInput: string;
+  itemInputError?: string;
   onItemInputChange: (value: string) => void;
   onInsert: () => void;
   onQuery: () => void;
@@ -27,6 +28,7 @@ const speedOptions = [
 
 export function BloomFilterControlPanel({
   itemInput,
+  itemInputError,
   onItemInputChange,
   onInsert,
   onQuery,
@@ -101,9 +103,18 @@ export function BloomFilterControlPanel({
           className="text-input"
           type="text"
           value={itemInput}
+          aria-invalid={itemInputError ? true : undefined}
+          aria-describedby={
+            itemInputError ? "bloom-item-input-error" : undefined
+          }
           onChange={(event) => onItemInputChange(event.target.value)}
           placeholder="例: cherry"
         />
+        {itemInputError ? (
+          <p id="bloom-item-input-error" className="field-error">
+            {itemInputError}
+          </p>
+        ) : null}
         <div className="button-row">
           <button type="button" className="accent-button" onClick={onInsert}>
             Insert

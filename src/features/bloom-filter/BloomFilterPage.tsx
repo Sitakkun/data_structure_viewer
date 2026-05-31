@@ -35,6 +35,7 @@ export function BloomFilterPage() {
   const [steps, setSteps] = useState<BloomStep[]>([]);
   const [currentStepIndex, setCurrentStepIndex] = useState(-1);
   const [itemInput, setItemInput] = useState("cherry");
+  const [itemInputError, setItemInputError] = useState<string>();
   const [selectedScenarioId, setSelectedScenarioId] = useState(emptyBloomScenario.id);
   const [scenarioTitle, setScenarioTitle] = useState(emptyBloomScenario.title);
   const [scenarioDescription, setScenarioDescription] = useState(
@@ -72,6 +73,7 @@ export function BloomFilterPage() {
   function loadScenario(scenarioId: string) {
     const scenario = findScenarioById(scenarioId);
 
+    setItemInputError(undefined);
     setIsPlaying(false);
     setSelectedScenarioId(scenario.id);
     setScenarioTitle(scenario.title);
@@ -91,6 +93,7 @@ export function BloomFilterPage() {
   function commitSteps(nextSteps: BloomStep[], operationLabel: string) {
     const finalState = nextSteps[nextSteps.length - 1]?.bloomState ?? committedState;
 
+    setItemInputError(undefined);
     setIsPlaying(false);
     setSelectedScenarioId(`bloom-manual-${operationLabel}`);
     setScenarioTitle(operationLabel);
@@ -112,18 +115,22 @@ export function BloomFilterPage() {
   function handleInsert() {
     const item = itemInput.trim();
     if (item.length === 0) {
+      setItemInputError("Item is required.");
       return;
     }
 
+    setItemInputError(undefined);
     commitSteps(buildInsertSteps(committedState, item), `INSERT ${item}`);
   }
 
   function handleQuery() {
     const item = itemInput.trim();
     if (item.length === 0) {
+      setItemInputError("Item is required.");
       return;
     }
 
+    setItemInputError(undefined);
     commitSteps(buildQuerySteps(committedState, item), `QUERY ${item}`);
   }
 
@@ -187,7 +194,11 @@ export function BloomFilterPage() {
       <div className="workspace">
         <BloomFilterControlPanel
           itemInput={itemInput}
-          onItemInputChange={setItemInput}
+          itemInputError={itemInputError}
+          onItemInputChange={(value) => {
+            setItemInput(value);
+            setItemInputError(undefined);
+          }}
           onInsert={handleInsert}
           onQuery={handleQuery}
           onLoadScenario={loadScenario}

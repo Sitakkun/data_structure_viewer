@@ -99,6 +99,7 @@ export function HashTableCollisionPage() {
   const [steps, setSteps] = useState<Step[]>([]);
   const [currentStepIndex, setCurrentStepIndex] = useState(-1);
   const [keyInput, setKeyInput] = useState("17");
+  const [keyInputError, setKeyInputError] = useState<string>();
   const [selectedScenarioId, setSelectedScenarioId] = useState(
     emptyChainingScenario.id,
   );
@@ -139,6 +140,7 @@ export function HashTableCollisionPage() {
   function loadScenario(scenarioId: string, strategy = selectedStrategy) {
     const scenario = findScenarioById(strategy, scenarioId);
 
+    setKeyInputError(undefined);
     setIsPlaying(false);
     setSelectedScenarioId(scenario.id);
     setScenarioTitle(scenario.title);
@@ -169,9 +171,11 @@ export function HashTableCollisionPage() {
     const key = Number(keyInput);
 
     if (!Number.isInteger(key)) {
+      setKeyInputError("Key must be an integer.");
       return;
     }
 
+    setKeyInputError(undefined);
     const result = currentLesson.runOperation(operation, key, committedState);
 
     setIsPlaying(false);
@@ -251,7 +255,11 @@ export function HashTableCollisionPage() {
           selectedStrategy={selectedStrategy}
           onStrategyChange={handleStrategyChange}
           keyInput={keyInput}
-          onKeyInputChange={setKeyInput}
+          keyInputError={keyInputError}
+          onKeyInputChange={(value) => {
+            setKeyInput(value);
+            setKeyInputError(undefined);
+          }}
           onInsert={() => runManualOperation("insert")}
           onSearch={() => runManualOperation("search")}
           onDelete={() => runManualOperation("delete")}

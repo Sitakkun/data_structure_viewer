@@ -7,8 +7,10 @@ interface BufferPoolControlPanelProps {
   selectedPolicy: BufferPolicy;
   onPolicyChange: (policy: BufferPolicy) => void;
   pageInput: string;
+  pageInputError?: string;
   onPageInputChange: (value: string) => void;
   rangeStartInput: string;
+  rangeInputError?: string;
   onRangeStartInputChange: (value: string) => void;
   rangeEndInput: string;
   onRangeEndInputChange: (value: string) => void;
@@ -42,8 +44,10 @@ export function BufferPoolControlPanel({
   selectedPolicy,
   onPolicyChange,
   pageInput,
+  pageInputError,
   onPageInputChange,
   rangeStartInput,
+  rangeInputError,
   onRangeStartInputChange,
   rangeEndInput,
   onRangeEndInputChange,
@@ -147,9 +151,18 @@ export function BufferPoolControlPanel({
           className="text-input"
           type="number"
           value={pageInput}
+          aria-invalid={pageInputError ? true : undefined}
+          aria-describedby={
+            pageInputError ? "buffer-page-input-error" : undefined
+          }
           onChange={(event) => onPageInputChange(event.target.value)}
           placeholder="例: 7"
         />
+        {pageInputError ? (
+          <p id="buffer-page-input-error" className="field-error">
+            {pageInputError}
+          </p>
+        ) : null}
         <div className="button-row">
           <button type="button" className="accent-button" onClick={onRead}>
             Read
@@ -177,6 +190,10 @@ export function BufferPoolControlPanel({
               className="text-input"
               type="number"
               value={rangeStartInput}
+              aria-invalid={rangeInputError ? true : undefined}
+              aria-describedby={
+                rangeInputError ? "buffer-range-input-error" : undefined
+              }
               onChange={(event) => onRangeStartInputChange(event.target.value)}
               placeholder="10"
             />
@@ -190,11 +207,20 @@ export function BufferPoolControlPanel({
               className="text-input"
               type="number"
               value={rangeEndInput}
+              aria-invalid={rangeInputError ? true : undefined}
+              aria-describedby={
+                rangeInputError ? "buffer-range-input-error" : undefined
+              }
               onChange={(event) => onRangeEndInputChange(event.target.value)}
               placeholder="13"
             />
           </div>
         </div>
+        {rangeInputError ? (
+          <p id="buffer-range-input-error" className="field-error">
+            {rangeInputError}
+          </p>
+        ) : null}
         <div className="button-row">
           <button type="button" className="accent-button" onClick={onRangeScan}>
             Range Scan
