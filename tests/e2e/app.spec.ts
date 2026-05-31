@@ -169,6 +169,47 @@ test("runs B-tree range scan and exposes cost comparison", async ({ page }) => {
   await expect(inspector(page)).toContainText("Step comparison");
 });
 
+test("shows inline validation for invalid operation inputs", async ({ page }) => {
+  await openApp(page);
+
+  await controls(page).getByLabel("Key").fill("1.5");
+  await clickControl(page, "Insert");
+  await expect(controls(page)).toContainText("Key must be an integer.");
+  await expect(controls(page).getByLabel("Key")).toHaveAttribute(
+    "aria-invalid",
+    "true",
+  );
+  await expect(controls(page)).toContainText("Step 0 / 0");
+
+  await controls(page).getByLabel("Key").fill("17");
+  await expect(controls(page).getByText("Key must be an integer.")).toHaveCount(
+    0,
+  );
+
+  await selectTopic(page, "B-tree");
+  await controls(page).getByLabel("Start").fill("50");
+  await controls(page).getByLabel("End").fill("20");
+  await clickControl(page, "Range Scan");
+
+  await expect(controls(page)).toContainText(
+    "Start must be less than or equal to End.",
+  );
+  await expect(controls(page).getByLabel("Start")).toHaveAttribute(
+    "aria-invalid",
+    "true",
+  );
+  await expect(controls(page)).toContainText("Step 0 / 0");
+  await expect(page.getByText("RANGE 50..20")).toHaveCount(0);
+
+  await controls(page).getByLabel("Start").fill("20");
+  await controls(page).getByLabel("End").fill("50");
+  await clickControl(page, "Range Scan");
+  await expect(inspectorHeading(page)).toHaveText("RANGE 20..50");
+  await expect(
+    controls(page).getByText("Start must be less than or equal to End."),
+  ).toHaveCount(0);
+});
+
 test("shows a clickable step timeline with named milestones", async ({ page }) => {
   await openApp(page);
   await selectTopic(page, "B-tree");

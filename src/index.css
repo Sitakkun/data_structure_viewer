@@ -311,6 +311,20 @@ button {
   background: rgba(255, 255, 255, 0.9);
 }
 
+.text-input[aria-invalid="true"] {
+  border-color: rgba(207, 95, 47, 0.72);
+  background: rgba(255, 244, 238, 0.95);
+  box-shadow: 0 0 0 3px rgba(207, 95, 47, 0.12);
+}
+
+.field-error {
+  margin: 8px 0 0;
+  color: #9b3c1f;
+  font-size: 0.84rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
 .select-input {
   appearance: none;
 }
