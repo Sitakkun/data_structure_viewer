@@ -80,6 +80,7 @@ test("navigates all study pages", async ({ page }) => {
     ["Bloom Filter", "Bloom Filter"],
     ["Write Amplification", "Write Amplification"],
     ["Buffer Pool", "Buffer Pool"],
+    ["External Merge Sort", "External Merge Sort"],
     ["Paxos", "Paxos"],
     ["Consistent Hashing", "Hash Ring"],
     ["Chord", "Chord Finger Table"],
@@ -116,6 +117,9 @@ test("groups topic navigation by learning track", async ({ page }) => {
   expect(
     groups.find((group) => group.track === "Distributed Hashing")?.topics,
   ).toEqual(["Consistent Hashing", "Chord"]);
+  expect(
+    groups.find((group) => group.track === "Database Operators")?.topics,
+  ).toEqual(["External Merge Sort"]);
   expect(groups.find((group) => group.isCurrent)?.track).toBe("Hashing");
 
   await selectTopic(page, "B-tree");
@@ -141,6 +145,7 @@ test("shows guided what-to-watch prompts before playback", async ({ page }) => {
     "Bloom Filter",
     "Write Amplification",
     "Buffer Pool",
+    "External Merge Sort",
     "Paxos",
     "Consistent Hashing",
     "Chord",
@@ -383,6 +388,50 @@ test("marks a Buffer Pool update as dirty", async ({ page }) => {
   await clickNext(page);
   await expect(page.getByRole("heading", { name: "Load page 9" })).toBeVisible();
   await expect(page.getByTestId("dirty-frame")).toHaveCount(1);
+});
+
+test("runs External Merge Sort and reports pass cost", async ({ page }) => {
+  await openApp(page);
+  await selectTopic(page, "External Merge Sort");
+
+  await expect(
+    page.getByRole("heading", { name: "External Merge Sort", level: 1 }),
+  ).toBeVisible();
+  await loadScenario(page, "Constrained buffers need extra pass");
+  await expect(inspectorHeading(page)).toHaveText(
+    "Constrained buffers need extra pass",
+  );
+  await expect(watchPoints(page)).toContainText("fan-in が 2");
+  await expect(page.locator(".panel-visualizer")).toContainText(
+    "Merge fan-in = 2",
+  );
+
+  await clickNext(page);
+  await expect(inspectorHeading(page)).toHaveText("Generate sorted runs");
+  await expect(page.locator(".panel-inspector")).toContainText("Initial runs");
+  await expect(page.locator(".panel-inspector")).toContainText("8");
+
+  await clickNext(page);
+  await expect(inspectorHeading(page)).toHaveText(
+    "Merge pass 1: 8 runs -> 4 runs",
+  );
+  await expect(page.locator(".panel-visualizer")).toContainText("Pass 1");
+
+  await clickNext(page);
+  await clickNext(page);
+  await expect(inspectorHeading(page)).toHaveText(
+    "Merge pass 3: 2 runs -> 1 run",
+  );
+  await expect(page.locator(".panel-inspector")).toContainText("768 pages");
+
+  await page.getByLabel("Records / pages").fill("64");
+  await page.getByLabel("Run size").fill("16");
+  await page.getByLabel("Buffers").fill("5");
+  await clickControl(page, "Build sort plan");
+
+  await expect(inspectorHeading(page)).toHaveText("Manual external sort plan");
+  await expect(page.locator(".panel-visualizer")).toContainText("Records = 64 pages");
+  await expect(page.locator(".panel-visualizer")).toContainText("Merge fan-in = 4");
 });
 
 test("keeps mobile panel order and playback dock", async ({ page }) => {

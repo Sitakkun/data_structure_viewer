@@ -6,6 +6,7 @@ import { BloomFilterPage } from "./features/bloom-filter/BloomFilterPage";
 import { BufferPoolPage } from "./features/buffer-pool/BufferPoolPage";
 import { ChordPage } from "./features/consistent-hashing-chord/ChordPage";
 import { HashRingPage } from "./features/consistent-hashing-hash-ring/HashRingPage";
+import { ExternalMergeSortPage } from "./features/external-merge-sort/ExternalMergeSortPage";
 import { HashTableCollisionPage } from "./features/hash-table-chaining/HashTableCollisionPage";
 import { LSMTreePage } from "./features/lsm-tree/LSMTreePage";
 import { PaxosPage } from "./features/paxos/PaxosPage";
@@ -17,6 +18,7 @@ type StudyPage =
   | "b-tree"
   | "bloom-filter"
   | "buffer-pool"
+  | "external-merge-sort"
   | "hash-table-collision"
   | "lsm-tree"
   | "paxos"
@@ -79,6 +81,12 @@ const studyPages: StudyPageMeta[] = [
     title: "Buffer Pool",
     track: "Database Storage",
     description: "LRU と CLOCK の page replacement、dirty page、pin count を確認します。",
+  },
+  {
+    id: "external-merge-sort",
+    title: "External Merge Sort",
+    track: "Database Operators",
+    description: "run generation、k-way merge、pass count、I/O cost を確認します。",
   },
   {
     id: "paxos",
@@ -178,6 +186,14 @@ const glossaryTerms = [
   {
     term: "reference bit",
     description: "CLOCK replacement で最近参照された page に second chance を与えるための bit です。",
+  },
+  {
+    term: "sorted run",
+    description: "external sort で memory に乗る範囲を sort して disk に書き出した部分列です。",
+  },
+  {
+    term: "merge fan-in",
+    description: "1 回の merge pass で同時に読み込める input run の本数です。",
   },
 ];
 
@@ -417,6 +433,7 @@ export default function App() {
       {selectedPage === "b-tree" ? <BTreePage /> : null}
       {selectedPage === "bloom-filter" ? <BloomFilterPage /> : null}
       {selectedPage === "buffer-pool" ? <BufferPoolPage /> : null}
+      {selectedPage === "external-merge-sort" ? <ExternalMergeSortPage /> : null}
       {selectedPage === "hash-table-collision" ? <HashTableCollisionPage /> : null}
       {selectedPage === "lsm-tree" ? <LSMTreePage /> : null}
       {selectedPage === "paxos" ? <PaxosPage /> : null}

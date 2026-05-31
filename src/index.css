@@ -2080,6 +2080,135 @@ button {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.external-sort-input-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.external-sort-input-strip,
+.external-sort-run-row,
+.external-sort-merge-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.external-sort-input-strip {
+  margin-bottom: 18px;
+  padding: 12px;
+  border-radius: 18px;
+  border: 1px solid rgba(23, 32, 51, 0.07);
+  background: rgba(255, 255, 255, 0.54);
+}
+
+.external-sort-page-chip,
+.external-sort-run-chip {
+  display: inline-grid;
+  align-items: center;
+  justify-items: center;
+  min-width: 48px;
+  min-height: 38px;
+  padding: 7px 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(23, 32, 51, 0.08);
+  background: rgba(255, 255, 255, 0.72);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.external-sort-page-chip.is-more {
+  color: var(--ink-soft);
+  border-style: dashed;
+}
+
+.external-sort-run-chip {
+  min-width: 72px;
+  gap: 2px;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.external-sort-run-chip small {
+  color: var(--ink-soft);
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.external-sort-run-chip.is-active {
+  border-color: rgba(207, 95, 47, 0.34);
+  background: rgba(255, 244, 238, 0.95);
+  transform: translateY(-1px);
+}
+
+.external-sort-run-chip.is-output {
+  border-color: rgba(36, 107, 100, 0.26);
+  background: rgba(36, 107, 100, 0.1);
+}
+
+.external-sort-section + .external-sort-section {
+  margin-top: 18px;
+}
+
+.external-sort-pass-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.external-sort-pass-card {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(23, 32, 51, 0.07);
+  background: rgba(255, 255, 255, 0.54);
+}
+
+.external-sort-pass-card.is-completed {
+  border-color: rgba(36, 107, 100, 0.18);
+  background: rgba(36, 107, 100, 0.06);
+}
+
+.external-sort-pass-card.is-active {
+  border-color: rgba(207, 95, 47, 0.32);
+  background: rgba(255, 244, 238, 0.9);
+}
+
+.external-sort-pass-header,
+.external-sort-merge-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.external-sort-pass-header span,
+.external-sort-complete-note {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.external-sort-merge-groups {
+  display: grid;
+  gap: 10px;
+}
+
+.external-sort-merge-group {
+  justify-content: flex-start;
+  padding: 10px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.external-sort-arrow {
+  color: var(--teal);
+  font-weight: 900;
+}
+
 .mobile-playback-dock {
   display: none;
 }
@@ -2697,6 +2826,7 @@ button {
   }
 
   .range-input-grid,
+  .external-sort-input-grid,
   .comparison-grid,
   .language-toggle,
   .wa-engine-toggle {
@@ -2744,7 +2874,10 @@ button {
   .bplus-leaf-row,
   .chord-path-row,
   .ring-resource-list,
-  .bloom-item-list {
+  .bloom-item-list,
+  .external-sort-input-strip,
+  .external-sort-run-row,
+  .external-sort-merge-inputs {
     flex-wrap: nowrap;
     overflow-x: auto;
     padding-bottom: 4px;
@@ -2756,7 +2889,9 @@ button {
   }
 
   .chain-segment,
-  .bplus-leaf-chain-item {
+  .bplus-leaf-chain-item,
+  .external-sort-run-chip,
+  .external-sort-page-chip {
     flex: 0 0 auto;
     scroll-snap-align: start;
   }
