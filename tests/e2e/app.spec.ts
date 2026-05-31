@@ -641,6 +641,79 @@ test("compresses mobile first viewport behind study tools", async ({ page }) => 
   await expect(panels.getByText("Study note", { exact: true })).toBeVisible();
 });
 
+test("prioritizes mobile sample scenarios before manual controls", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await openApp(page);
+
+  const hashLayout = await page.evaluate(() => {
+    const rect = (selector: string) => {
+      const element = document.querySelector(selector);
+      const bounds = element?.getBoundingClientRect();
+
+      return bounds
+        ? {
+            top: bounds.top,
+            bottom: bounds.bottom,
+            height: bounds.height,
+          }
+        : null;
+    };
+
+    return {
+      firstScenario: rect(".panel-controls .scenario-card"),
+      keyInput: rect(".panel-controls .text-input"),
+      scenarioSectionOrder: window.getComputedStyle(
+        document.querySelector(
+          ".panel-controls > .panel-section:last-child",
+        ) as Element,
+      ).order,
+      viewportHeight: window.innerHeight,
+    };
+  });
+
+  expect(hashLayout.scenarioSectionOrder).toBe("2");
+  expect(hashLayout.firstScenario?.top).toBeLessThan(
+    hashLayout.keyInput?.top ?? Number.POSITIVE_INFINITY,
+  );
+  expect(hashLayout.firstScenario?.top).toBeLessThan(
+    hashLayout.viewportHeight - 180,
+  );
+
+  await selectTopic(page, "B+ Tree");
+
+  const bplusLayout = await page.evaluate(() => {
+    const rect = (selector: string) => {
+      const element = document.querySelector(selector);
+      const bounds = element?.getBoundingClientRect();
+
+      return bounds
+        ? {
+            top: bounds.top,
+            bottom: bounds.bottom,
+            height: bounds.height,
+          }
+        : null;
+    };
+
+    return {
+      firstScenario: rect(".panel-controls .scenario-card"),
+      keyInput: rect(".panel-controls .text-input"),
+      rangeScanButton: rect(".panel-controls .single-action"),
+      viewportHeight: window.innerHeight,
+    };
+  });
+
+  expect(bplusLayout.firstScenario?.top).toBeLessThan(
+    bplusLayout.keyInput?.top ?? Number.POSITIVE_INFINITY,
+  );
+  expect(bplusLayout.firstScenario?.top).toBeLessThan(
+    bplusLayout.rangeScanButton?.top ?? Number.POSITIVE_INFINITY,
+  );
+  expect(bplusLayout.firstScenario?.top).toBeLessThan(
+    bplusLayout.viewportHeight - 180,
+  );
+});
+
 test("keeps mobile Step Log compact and expandable", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await openApp(page);
