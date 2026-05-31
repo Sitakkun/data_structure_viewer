@@ -464,6 +464,44 @@ test("switches mobile layout into playback mode after stepping", async ({ page }
   await expect(page.locator("body")).toHaveClass(/mobile-playback-active/);
   await expect(playbackDock).toContainText("Step 1 /");
   await expect(playbackDock).toContainText("ハッシュ値を計算");
+  await expect
+    .poll(async () =>
+      await page
+        .locator(".panel-visualizer")
+        .evaluate((element) => element.getBoundingClientRect().top),
+    )
+    .toBeLessThan(120);
+
+  const focusLayout = await page.evaluate(() => {
+    const visualizer = document
+      .querySelector(".panel-visualizer")
+      ?.getBoundingClientRect();
+    const inspector = document
+      .querySelector(".panel-inspector")
+      ?.getBoundingClientRect();
+    const dock = document
+      .querySelector(".mobile-playback-dock")
+      ?.getBoundingClientRect();
+    const statsDisplay = window.getComputedStyle(
+      document.querySelector(".panel-inspector .stats-grid") as Element,
+    ).display;
+
+    return {
+      dockTop: dock?.top ?? 0,
+      inspectorHeight: inspector?.height ?? 0,
+      inspectorTop: inspector?.top ?? 0,
+      statsDisplay,
+      visualizerHeight: visualizer?.height ?? 0,
+      visualizerTop: visualizer?.top ?? 0,
+    };
+  });
+
+  expect(focusLayout.visualizerTop).toBeGreaterThanOrEqual(48);
+  expect(focusLayout.visualizerHeight).toBeLessThanOrEqual(640);
+  expect(focusLayout.inspectorTop).toBeGreaterThan(focusLayout.visualizerTop);
+  expect(focusLayout.inspectorTop).toBeLessThan(focusLayout.dockTop);
+  expect(focusLayout.inspectorHeight).toBeLessThan(150);
+  expect(focusLayout.statsDisplay).toBe("none");
 
   const playbackLayout = await page.evaluate(() => {
     const rect = (selector: string) => {
@@ -496,6 +534,13 @@ test("switches mobile layout into playback mode after stepping", async ({ page }
 
   await playbackDock.getByRole("button", { name: "Reset", exact: true }).click();
   await expect(page.locator("body")).not.toHaveClass(/mobile-playback-active/);
+  await expect
+    .poll(async () =>
+      await page
+        .locator(".panel-controls")
+        .evaluate((element) => element.getBoundingClientRect().top),
+    )
+    .toBeGreaterThan(0);
 
   const resetLayout = await page.evaluate(() => {
     const controls = document

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 interface MobilePlaybackDockProps {
@@ -10,6 +10,28 @@ interface MobilePlaybackDockProps {
   onPrev: () => void;
   onNext: () => void;
   onReset: () => void;
+}
+
+const mobilePlaybackMediaQuery = "(max-width: 720px)";
+
+function isMobilePlaybackViewport() {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia(mobilePlaybackMediaQuery).matches
+  );
+}
+
+function scrollMobilePanelIntoView(selector: string) {
+  if (!isMobilePlaybackViewport()) {
+    return;
+  }
+
+  window.requestAnimationFrame(() => {
+    document.querySelector(selector)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  });
 }
 
 export function MobilePlaybackDock({
@@ -24,6 +46,7 @@ export function MobilePlaybackDock({
 }: MobilePlaybackDockProps) {
   const [isReadingContent, setIsReadingContent] = useState(false);
   const isPlaybackModeActive = isPlaying || currentStepIndex >= 0;
+  const lastFocusKeyRef = useRef("");
   const stepLabel =
     currentStepIndex >= 0
       ? `Step ${currentStepIndex + 1} / ${totalSteps}`
@@ -54,6 +77,24 @@ export function MobilePlaybackDock({
   }, []);
 
   useEffect(() => {
+    const focusKey = isPlaybackModeActive
+      ? `${currentStepIndex}:${isPlaying}:${totalSteps}`
+      : "inactive";
+
+    if (lastFocusKeyRef.current === focusKey) {
+      return;
+    }
+
+    lastFocusKeyRef.current = focusKey;
+
+    if (!isPlaybackModeActive || totalSteps === 0) {
+      return;
+    }
+
+    scrollMobilePanelIntoView(".panel-visualizer");
+  }, [currentStepIndex, isPlaybackModeActive, isPlaying, totalSteps]);
+
+  useEffect(() => {
     if (typeof document === "undefined") {
       return undefined;
     }
@@ -67,6 +108,11 @@ export function MobilePlaybackDock({
       document.body.classList.remove("mobile-playback-active");
     };
   }, [isPlaybackModeActive]);
+
+  function handleResetClick() {
+    onReset();
+    scrollMobilePanelIntoView(".panel-controls");
+  }
 
   if (typeof document === "undefined") {
     return null;
@@ -92,7 +138,11 @@ export function MobilePlaybackDock({
         </strong>
       </div>
       <div className="mobile-playback-buttons">
-        <button type="button" className="secondary-button" onClick={onReset}>
+        <button
+          type="button"
+          className="secondary-button"
+          onClick={handleResetClick}
+        >
           Reset
         </button>
         <button type="button" className="secondary-button" onClick={onPrev}>
