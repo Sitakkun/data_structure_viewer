@@ -2136,6 +2136,8 @@ button {
 
   .panel-controls {
     order: 1;
+    display: grid;
+    gap: 14px;
   }
 
   .panel-visualizer {
@@ -2493,7 +2495,25 @@ button {
   }
 
   .panel-controls .panel-header {
-    margin-bottom: 12px;
+    order: 1;
+    margin-bottom: 0;
+  }
+
+  .panel-controls > .panel-section {
+    order: 3;
+    margin-top: 0;
+  }
+
+  .panel-controls > .panel-section + .panel-section {
+    margin-top: 0;
+  }
+
+  .panel-controls > .panel-section:last-child {
+    order: 2;
+    padding: 12px;
+    border-radius: 18px;
+    border: 1px solid rgba(36, 107, 100, 0.1);
+    background: rgba(36, 107, 100, 0.05);
   }
 
   .panel-controls .strategy-toggle {
